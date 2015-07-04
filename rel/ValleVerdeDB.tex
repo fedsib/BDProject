@@ -1,0 +1,115 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[english,italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{amssymb,amsmath}
+\usepackage[titles]{tocloft}
+\usepackage{appendix}
+\hypersetup{%
+    pdfborder = {0 0 0}
+}
+\usepackage{graphicx}
+
+\usepackage[svgnames]{xcolor} % Required to specify font color
+\usepackage{eurosym}
+
+\newcommand*{\plogo}{\fbox{$\mathcal{PL}$}} % Generic publisher logo
+\usepackage{listings}
+\usepackage{fancyhdr}
+
+
+
+\usepackage{lastpage}
+\usepackage{ragged2e}
+
+\setlength{\voffset}{-0.5in}
+\setlength{\topmargin}{-0.2in}
+\setlength{\textheight}{240mm}
+\setlength{\textwidth}{142mm}
+\setlength{\evensidemargin}{0.3in}
+\setlength{\oddsidemargin}{0.3in}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+  \bfseries
+  \huge UNIVERSITÀ DEGLI STUDI DI PADOVA
+  \vskip-.1in
+  \rule{\textwidth}{1.5pt}
+  \vskip.1in
+  \textsc{\LARGE Scuola di Scienze}
+  \vskip.2in
+  \includegraphics[scale=.2]{images/logo-unipd}
+  \vskip.25in
+  \large CORSO DI LAUREA IN INFORMATICA
+  \vskip.7in
+  \Large PROGETTO \vskip.1in DI
+  \vskip.1in
+  \LARGE BASI DI DATI
+  \vskip.7in
+  \emph{\huge Valle Verde Tennis Club}
+\end{center}
+
+\vskip1in
+\hskip.2\textwidth
+\begin{minipage}{.75\textwidth}
+  \begin{flushleft}
+    \bfseries\large \par \emph{Marco Leorato Matricola: 1006028}
+    \bfseries\large \par \emph{Federico Silvio Busetto Matricola:1026925}
+  \end{flushleft}
+\end{minipage}
+
+\vskip0.9in
+\centering
+\bfseries
+\Large ANNO ACCADEMICO 2014-2015
+\end{titlepage}
+
+\pagestyle{empty}
+\newpage
+
+\tableofcontents
+\clearpage
+
+
+%----------------------------------------------------------------------------------------
+%	CONSTANTS
+%----------------------------------------------------------------------------------------
+
+\newcommand{\authorName}{Marco Leorato - Federico Silvio Busetto}
+
+%----------------------------------------------------------------------------------------
+%	HEADER FORMAT
+%----------------------------------------------------------------------------------------
+
+\fancyhf{}
+\fancyhead[RE]{\small\scshape\nouppercase{\leftmark}}
+\fancyhead[LO]{\small\scshape\nouppercase{\rightmark}}
+\fancyhead[LE,RO]{\small\thepage}
+\lhead{\rightmark}
+\rhead{\leftmark}
+\rfoot{\thepage/\pageref{LastPage}}
+\lfoot{\authorName}
+
+\pagestyle{fancy}
+
+%----------------------------------------------------------------------------------------
+%	CONTENT
+%----------------------------------------------------------------------------------------
+
+\include{analisi_requisiti} %include abstract
+\include{progettazione_concettuale} 
+\include{progettazione_logica} %include schema logico in DDL SQL
+\include{query} %include view,funzioni,trigger,procedure
+\include{web} %tutta la parte web
+\include{conclusioni} %considerazioni finali
+
+%\appendix
+
+%\input{glossario}
+\end{document}
