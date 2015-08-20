@@ -79,11 +79,20 @@
 		} elseif ((isset($_GET['action'])) && ($_GET['action'] == 'nuova') ) {
 			
 			$dataoggi = date('Y-m-d');
-			$tipocampi = array('Terra Rossa','Erba Sintetica','PlayIt');
+			$tipocampi = array();
 			
 			$conn = connessione();
+			$sql = "SELECT CAMPO.TipoSup FROM CAMPO";
+				$result = $conn->query($sql) or die("Errore nella query MySQL 4");
+			if (($result->num_rows) > 0) {
+				$numrighe = $result->num_rows;
+				while($row = $result->fetch_assoc()) {
+					array_push($tipocampi, $row['TipoSup']);
+				}
+			}
+			
 			echo '<table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2"">';
-			for ($x = 1; $x <= 3; $x++) {
+			for ($x = 1; $x <= $numrighe; $x++) {
 				$datacal = date('Y-m-d', strtotime("$dataoggi +1 day"));
 				echo '<tr><th colspan="7" style="height: 30px;">Prenotazioni per il campo n.'.($x).' in '. $tipocampi[$x-1].' nel giorno</th></tr><tr>';
 				for ($y = 1; $y <= 7; $y++) {
@@ -99,7 +108,7 @@
 						FROM 
 						PRENOTAZIONE 
 						WHERE PRENOTAZIONE.CodCampo = '$x' AND PRENOTAZIONE.Data = '$datacal' AND PRENOTAZIONE.Ora = '$z'";
-						$result = $conn->query($sql) or die("Errore nella query MySQL 4");
+						$result = $conn->query($sql) or die("Errore nella query MySQL 5");
 						if (!($result->num_rows)) {
 							if ($z < 10) {	
 								$orario = "0".$z.".00";
@@ -164,7 +173,7 @@
 		}
 		
 		if ( $numrighe < 7) {
-		echo '<br /><a href="prenotazione.php?action=nuova">Aggiungi nuova prenotazione</a></form>';
+		echo '<br /><a href="prenotazione.php?action=nuova">Aggiungi nuova prenotazione</a>';
 		} else {
 			echo '<br /><p>Non puoi effettuare altre prenotazioni al momento.</p>';
 		}

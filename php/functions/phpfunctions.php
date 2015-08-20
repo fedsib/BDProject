@@ -64,7 +64,7 @@ if (isset($_SESSION['User'])) {
 </p>';
 	
 //Parte visibile solo agli amministratori
-	if($_SESSION['Tipo'] == 'Personale')
+	if($_SESSION['Tipo'] == 'Admin')
 echo '<p id="menuamministratore">Area Amministratore:</p>
 	<ul>
 		<li class="link_menu"><a href="gcorsi.php">Gestione Corsi</a></li> 

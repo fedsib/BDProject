@@ -45,11 +45,11 @@
 			
 			echo '<p>Bisogna effettuare il login come utente od amministratore per vedere questa pagina.';
 			
-	} elseif (($_SESSION['Tipo'])== "Admin") { 
+	} elseif (($_SESSION['Tipo']) == "Admin") { 
 	
 			echo '<p>Solo gli utenti possono iscriversi ai corsi, per vedere/gestire i corsi <a href="gcorsi.php">clicca qui</a>.';
 		
-	} elseif ((isset($_GET['action'])) && ($_GET['action'])="vedi" ) {
+	} elseif ((isset($_GET['action'])) && ($_GET['action']) =="vedi" ) {
 		
 		$conn = connessione();
 		$sql = "SELECT CORSO.CodCorso, CORSO.NomeCorso, CORSO.TipoCorso, ACCISC.UserName, PERSONA.Nome, PERSONA.Cognome
@@ -67,7 +67,7 @@ ON CORSO.CodCorso = ACCISC.CodCorso WHERE CORSO.Attivo='1'";
 				echo "<td>".$row['Nome']." ".$row['Cognome']."</td>";
 				echo "<td>";
 				if ($row['UserName']) { echo "ISCRITTO"; } echo "</td>";
-				echo '<td><form action="informazionicorso.php" method="post"><input type="hidden" readonly="readonly" value="'.$row['CodCorso'].'"><input name="Informazioni" type="submit" value="Informazioni sul corso"/></form></td></tr>';
+				echo '<td><a href="informazionicorso.php?action='.$row['CodCorso'].'">Informazioni sul corso</a></td></tr>';
 				}
 				echo "</table>";
 		} else {
@@ -89,11 +89,11 @@ WHERE ACCOUNT.UserName='".$_SESSION['User']."'";
 		if ($result->num_rows > 0) {
 			echo '<table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2"><tr><th width="25%">Nome del Corso</th><th width="25%">Livello Corso</th><th width="25%">Istruttore</th><th></th></tr>';
 			while($row = $result->fetch_assoc()) {
-				echo '<td>'.$row['NomeCorso'].'</td>';
+				echo '<tr><td>'.$row['NomeCorso'].'</td>';
 				echo '<td>'.$row['TipoCorso'].'</td>';
 				echo "<td>".$row['Nome']." ".$row['Cognome'];
 				echo '</td>';
-				echo '<td><form action="informazionicorso.php" method="post"><input type="hidden" readonly="readonly" value="'.$row['CodCorso'].'"><input name="Informazioni" type="submit" value="Informazioni sul corso"/></form></td>';
+				echo '<td><a href="informazionicorso.php?action='.$row['CodCorso'].'">Informazioni sul corso</a></td></tr>';
 			}
 			echo "</table>";
 		} else {
