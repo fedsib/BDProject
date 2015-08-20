@@ -126,7 +126,7 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 				echo '</td></tr>';
 			}
 			
-			$sql = "SELECT PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo FROM LEZIONE LEFT JOIN PRENOTAZIONE ON LEZIONE.CodCorso = PRENOTAZIONE.CodCorso WHERE LEZIONE.CodCorso ='".$codcorso."'";
+			$sql = "SELECT PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo FROM LEZIONE LEFT JOIN PRENOTAZIONE ON LEZIONE.CodCorso = PRENOTAZIONE.CodCorso WHERE LEZIONE.CodCorso ='".$codcorso."' ORDER BY LEZIONE.CodLezione";
 			$result = $conn->query($sql) or die("Errore nella query MySQL 2");
 			if ($result->num_rows > 0) {
 				$x = 1;
@@ -136,8 +136,6 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 					$x = $x+1 ;
 				} else { echo '<tr><td>'.$x.'</td><td colspan="3">Lezione non ancora prenotata</td></tr>';}
 			} else { echo '<tr><b><td height="50px"colspan="4">Lezioni non ancora disponibili.</b></td></tr>';}
-			
-		} else { echo '<p>Corso non trovato <a href="corsi.php?action=vedi">Torna Indietro.</a></p>';}
 			
 			$sql = "SELECT ISCRITTOCORSO.CodCorso FROM ISCRITTOCORSO JOIN ACCOUNT ON ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale WHERE ISCRITTOCORSO.CodCorso ='$codcorso' AND ACCOUNT.UserName='".$_SESSION['User']."'";
 			$result = $conn->query($sql) or die("Errore nella query MySQL 3");
@@ -149,6 +147,10 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 				echo '<tr><td colspan="4" height="50"><form action="" method="post"><input name="Iscrizione" type="submit" value="Iscriviti a questo corso"/></form></td></tr>' ;
 			}
 			echo "</table>";
+			
+		} else { echo '<p>Corso non trovato <a href="corsi.php?action=vedi">Torna Indietro.</a></p>';}
+			
+			
 		} else {
 			
 			echo '<p>Errore nel link <a href="corsi.php">Torna Indietro.</a></p>';
