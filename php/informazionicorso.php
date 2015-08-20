@@ -111,7 +111,6 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 		}elseif ((isset($_GET['action']))) {
 			
 			$codcorso = ($_GET['action']);
-			
 			$conn = connessione();
 			$sql = "SELECT CORSO.CodCorso, CORSO.NomeCorso, CORSO.TipoCorso, PERSONA.Nome, PERSONA.Cognome
 			FROM CORSO
@@ -126,15 +125,15 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 				echo '</td></tr>';
 			}
 			
-			$sql = "SELECT PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo FROM LEZIONE LEFT JOIN PRENOTAZIONE ON LEZIONE.CodCorso = PRENOTAZIONE.CodCorso WHERE LEZIONE.CodCorso ='".$codcorso."' ORDER BY LEZIONE.CodLezione";
+			$sql = "SELECT LEZIONE.CodLezione, PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo FROM LEZIONE LEFT JOIN PRENOTAZIONE ON LEZIONE.CodLezione = PRENOTAZIONE.CodLezione WHERE LEZIONE.CodCorso ='".$codcorso."' ORDER BY LEZIONE.CodLezione";
 			$result = $conn->query($sql) or die("Errore nella query MySQL 2");
 			if ($result->num_rows > 0) {
-				$x = 1;
 				echo '<tr><th width="25%">Lez.N.</th><th width="25%">Campo N.</th><th width="25%">Data</th><th width="25%">Ora</th></tr>';
+				while($row = $result->fetch_assoc()) {
 				if ($row['CodCampo'] != NULL) {
-					echo '<tr><td>'.$x.'</td></tr><tr><td>'.$row['CodCampo'].'</td></tr><tr><td>'.$row['Data'].'</td></tr><tr><td>'.$row['Ora'].'</td></tr>';
-					$x = $x+1 ;
-				} else { echo '<tr><td>'.$x.'</td><td colspan="3">Lezione non ancora prenotata</td></tr>';}
+					echo '<tr><td>'.$row['CodLezione'].'</td><td>'.$row['CodCampo'].'</td><td>'.$row['Data'].'</td><td>'.$row['Ora'].'</td></tr>';
+				} else { echo '<tr><td>'.$row['CodLezione'].'</td><td colspan="3">Lezione non ancora prenotata</td></tr>';}
+				}
 			} else { echo '<tr><b><td height="50px"colspan="4">Lezioni non ancora disponibili.</b></td></tr>';}
 			
 			$sql = "SELECT ISCRITTOCORSO.CodCorso FROM ISCRITTOCORSO JOIN ACCOUNT ON ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale WHERE ISCRITTOCORSO.CodCorso ='$codcorso' AND ACCOUNT.UserName='".$_SESSION['User']."'";
