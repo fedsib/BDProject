@@ -21,8 +21,6 @@
 \usepackage{listings}
 \usepackage{fancyhdr}
 
-
-
 \usepackage{lastpage}
 \usepackage{ragged2e}
 
@@ -93,21 +91,21 @@
 \fancyhead[LE,RO]{\small\thepage}
 \lhead{\rightmark}
 \rhead{\leftmark}
-\rfoot{\thepage/\pageref{LastPage}}
+\rfoot{\pageref{LastPage}}
 \lfoot{\authorName}
 
 \pagestyle{fancy}
-
+\setlength{\parindent}{0pt}
 %----------------------------------------------------------------------------------------
 %	CONTENT
 %----------------------------------------------------------------------------------------
 
 \include{analisi_requisiti} %include abstract
 \include{progettazione_concettuale} 
-\include{progettazione_logica} %include schema logico in DDL SQL
+\include{progettazione_logica} %include schema logico e DDL SQL
 \include{query} %include view,funzioni,trigger,procedure
 \include{web} %tutta la parte web
-\include{conclusioni} %considerazioni finali
+\include{conclusioni} %eventuali considerazioni finali
 
 %\appendix
 

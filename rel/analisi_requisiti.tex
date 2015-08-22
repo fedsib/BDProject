@@ -2,10 +2,39 @@
 \begin{abstract}
 \justify
 Il \textit{Tennis Club Valleverde} offre ai suoi soci la possibilità di praticare il loro sport preferito in un ambiente immerso nella natura. \\
-Tra i servizi offerti dal Club, spicca la scuola Tennis, attiva in tutto il periodo dell’anno, nella quale vari istruttori sono a  disposizione dei soci che desiderano migliorare la loro tecnica di gioco tramite lezioni individuali oppure partecipando a corsi collettivi. \\
-Ai soci è inoltre offerta la possibilità di poter giocare delle partite libere tra loro, scegliendo tra una vasta gamma di campi in base alla superficie che più si adatta ai loro gusti, prenotando comodamente online. \\
+Tra i servizi offerti dal Club, spicca la scuola Tennis, attiva in tutto il periodo dell’anno, nella quale vari istruttori sono a  disposizione dei soci che desiderano migliorare la loro tecnica di gioco partecipando a corsi collettivi organizzati in lezioni. \\
+Ai soci è inoltre offerta la possibilità di poter giocare delle partite libere tra loro, scegliendo tra vari campi in base alla superficie che più si adatta ai loro gusti, prenotando i campi comodamente online. \\
 Per gestire questi servizi, il Tennis Club Valleverde si avvale di una base di dati associata ad un’applicazione web. \\
-Le operazioni tipiche sono la creazione e la modifica di record anagrafici dei soci, la gestione dei campi e delle relative prenotazioni (evitando sovrapposizioni tra lezioni individuali, corsi e partite libere).
+Le operazioni tipiche sono la creazione e la modifica di record anagrafici dei soci, la gestione dei campi e delle relative prenotazioni (evitando sovrapposizioni tra lezioni individuali, corsi e prenotazioni dei soci).
 \end{abstract}
 
-\section{Analisi dei Requisiti}
+\chapter{Analisi dei Requisiti} 
+
+Si vuole realizzare una base di dati che modelli alcune classi utili alla gestione del Tennis Club ValleVerde.\\ 
+Viene inoltre sviluppata un’applicazione web utilizzabile sia dagli istruttori che dai soci.\\
+
+Le entità principali che interessa modellare sono i \textbf{corsi} e le \textbf{prenotazioni}.\\
+
+Per ciascun \textbf{corso} interessano \textit{il nome}, \textit{il tipo} (“principiante”, “intermedio”, “avanzato”), se è \textit{attivo} oppure no e \textit{l'istruttore} che lo tiene. Ogni corso è identificato da un \textit{codice corso} ed è tenuto da un solo istruttore.\\
+
+Ogni corso attivo è composto di zero o più \textbf{lezioni}. Di ogni lezione interessa il suo \textit{codice}, la \textit{data} nella quale si svolge e il \textit{corso} del quale fa parte.\\
+
+Le lezioni si svolgono nei campi. Ogni \textbf{campo} è identificato univocamente tramite un \textit{codice campo} e l’unico altro dato rilevante è il \textit{tipo di superficie} del campo, che può essere: “Terra rossa”, ”Erba sintetica” o “Playit”). \\
+
+I campi vengono prenotati sia dagli \textbf{istruttori} (dei quali si vuole conoscere la loro \textit{qualifica}, la loro \textit{retribuzione} e la \textit{data di assunzione}) per svolgere le lezioni, che dai soci per giocare liberamente (Il Tennis club ValleVerde non ha interesse nel tenere traccia delle partite libere tra soci.)\\
+
+Di un \textbf{socio} è rilevante la sua \textit{data di iscrizione} al Tennis club e il suo \textit{livello} (principiante, intermedio, esperto).\\
+
+Le \textbf{persone} (istruttori e soci) sono identificate tramite il loro \textit{codice fiscale}, inoltre di essi interessano anche \textit{nome} e \textit{cognome}, \textit{sesso}, \textit{data} e il \textit{luogo di nascita} . E’ inoltre richiesto un indirizzo \textit{email} ed eventualmente un \textit{numero di telefono}. \\
+
+Ogni socio e ogni istruttore dispongono di un \textbf{account}, tramite il quale possono interagire con l’applicazione web secondo i permessi associati, per prenotare i campi (gli istruttori possono anche gestire prenotazioni e modificare i dati di soci e altri istruttori).
+Un account è rappresentato da uno \textit{username} univoco, dal \textit{tipo di permessi} e da una password. La password non viene memorizzata in chiaro, ma viene memorizzato il suo \textit{hash}.\\
+
+Tramite l’account personale è possibile prenotare i campi. Di una \textbf{prenotazione} interessa, il \textit{campo prenotato} , la \textit{data} e l'\textit{ora} per la quale si prenota il campo. \\
+
+Le operazioni tipiche sono l’inserimento, l’eliminazione e l’aggiornamento di dati anagrafici (di nuovi soci e istruttori), la prenotazione dei campi da parte dei soci per giocare tra loro e la prenotazione dei campi per le lezioni da parte degli istruttori. \\
+
+I soci possono solo inserire nuove prenotazioni (se il campo risulta disponibile), visualizzare, modificare e cancellare le proprie prenotazioni. 
+Gli istruttori, possono prenotare i campi, visualizzare le prenotazioni effettuate da tutti e cancellarle.
+Gli istruttori possono inoltre aggiungere nuovi soci e modificare l’anagrafica di soci e istruttori.
+
