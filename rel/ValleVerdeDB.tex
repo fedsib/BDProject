@@ -21,7 +21,6 @@
 \usepackage{listings}
 \usepackage{fancyhdr}
 
-\usepackage{lastpage}
 \usepackage{ragged2e}
 
 \setlength{\voffset}{-0.5in}
@@ -87,15 +86,21 @@
 
 \fancyhf{}
 \fancyhead[RE]{\small\scshape\nouppercase{\leftmark}}
-\fancyhead[LO]{\small\scshape\nouppercase{\rightmark}}
+%\fancyhead[LO]{\small\scshape\nouppercase{\rightmark}}
 \fancyhead[LE,RO]{\small\thepage}
-\lhead{\rightmark}
+%\lhead{\rightmark}
 \rhead{\leftmark}
-\rfoot{\pageref{LastPage}}
-\lfoot{\authorName}
 
+\fancypagestyle{plain}{\fancyfoot[RO,LE]{\thepage}}
+
+\rfoot{\thepage}
+
+\fancyfoot[RO, LE]{\thepage}
 \pagestyle{fancy}
+
 \setlength{\parindent}{0pt}
+
+
 %----------------------------------------------------------------------------------------
 %	CONTENT
 %----------------------------------------------------------------------------------------
