@@ -102,7 +102,7 @@ Chiave primaria: \underline{(CodCampo,Data,Ora)} \hfill
 \item Molteplicità: 1:1
 \item Totalità: Totale da Prenotazione a Campo, parziale da Campo a Prenotazione 
 \end{itemize}
-\item \textsc{Prenotazione – Lezione:} \textbf{fissa}
+\item \textsc{Prenotazione – Lezione:} \textbf{Fissa}
 \begin{itemize}
 \item Una prenotazione fissa zero o una lezione, una lezione viene fissata da una prenotazione. Possono esserci lezioni per le quali non è ancora stata effettuata una prenotazione.
 \item Molteplicità: 1:1
@@ -110,7 +110,19 @@ Chiave primaria: \underline{(CodCampo,Data,Ora)} \hfill
 \end{itemize}
 \end{itemize}
 
-
 \section{Descrizione della Gerarchia}
+L'unica gerarchia presente nello schema concettuale riguarda la superclasse \textit{Persona} che si divide nelle due sottoclassi specializzate \textit{Istruttore} e \textit{Socio}.\\
+
+Tale generalizzazione è \textit{Totale} in quanto ogni occorrenza di \textit{Persona} è anche occorrenza di \textit{Istruttore} o di \textit{Socio} (ricordiamo che \textit{Persona} modella una persona fisica all'interno del Tennis Club).\\
+La generalizzazione è inoltre \textit{esclusiva}, in quanto una \textit{Persona} rappresentata dalla superclasse non può essere contemporaneamente \textit{Socio} e \textit{Istruttore}.\\
+
+Le due sottoclassi specializzate prevedono degli attributi propri per modellare gli istruttori (\textit{Qualifica}, \textit{Retribuzione} e \textit{DataAssunzione}) e i soci (\textit{DataIscrizione} e \textit{Livello}).
+
 \section{Vincoli di Integrità aggiuntivi}
+
 \section{Schema concettuale E-R}
+\begin{figure}[H]
+ \centering
+  \includegraphics[width=\textwidth, height=\textheight]{Images/ER_FINALE.jpg}
+\caption{Schema Concettuale E-R}
+\end{figure}
