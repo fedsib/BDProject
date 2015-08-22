@@ -1,0 +1,71 @@
+\chapter{Progettazione Concettuale} 
+
+\section{Lista delle Classi}
+\begin{description}
+\item[PERSONA:] rappresenta una generica persona fisica all’interno del Tennis Club
+\begin{itemize}
+\item CodFiscale: \textit{string} \hfill 
+\item Nome: \textit{string}  \hfill 
+\item Cognome: \textit{string}  \hfill 
+\item Sesso: \textit{enum\{“Maschio”, “Femmina”\}}  \hfill 
+\item DataNasc: \textit{date}  \hfill 
+\item LuogoNasc: \textit{string}  \hfill 
+\item Telefono: \textit{string}  \hfill 
+\item Mail: \textit{string}  \hfill 
+\end{itemize}
+Chiave primaria: \underline{CodFiscale} \hfill \\
+
+Viene definita una partizione in due sottoclassi specifiche, di seguito riportate:
+\item[ISTRUTTORE:] modella un istruttore, cioè una persona che tiene un corso
+\begin{itemize}
+\item Qualifica: \textit{string} \hfill 
+\item Retribuzione: \textit{int} \hfill 
+\item DataAssunzione: \textit{date} \hfill 
+\end{itemize}
+\item[SOCIO:] modella un socio, cioè una persona non istruttore, che frequenta il Tennis Club ValleVerde
+\begin{itemize}
+\item DataIscrizione: \textit{date} \hfill 
+\item Livello: \textit{enum\{'Principiante', 'Intermedio', 'Esperto'\}} \hfill 
+\end{itemize}
+\item[ACCOUNT:] modella un account posseduto da una persona del Tennis Club
+\begin{itemize}
+\item UserName: \textit{string} \hfill 
+\item Admin: \textit{bool} \hfill 
+\item Hash: \textit{string} \hfill 
+\end{itemize}
+Chiave primaria (definita come identificatore esterno): \underline{CodFiscale} \hfill 
+\item[CORSO:] modella un generico corso tenuto all’interno della scuola Tennis del Tennis Club
+\begin{itemize}
+\item CodCorso: \textit{int} \hfill
+\item NomeCorso: \textit{string} \hfill
+\item TipoCorso: \textit{enum\{‘Principiante’,’Intermedio’,’Avanzato’\}} \hfill
+\item Attivo: \textit{bool} \hfill
+\end{itemize}
+Chiave primaria: \underline{CodCorso} \hfill 
+\item[LEZIONE:] rappresenta una lezione di un corso
+\begin{itemize}
+\item CodLezione: \textit{int} \hfill 
+\end{itemize}
+Chiave primaria: \underline{(CodCorso,CodLezione)} \hfill 
+\item[CAMPO:] modella un campo da Tennis
+\begin{itemize}
+\item CodCampo: \textit{int} \hfill 
+\item TipoSup: \textit{enum\{‘Terra rossa’, ‘Erba sintetica’, ‘Playit’\}}
+\end{itemize}
+Chiave primaria: \underline{CodCampo} \hfill 
+\item[PRENOTAZIONE:] modella una prenotazione di un campo
+\begin{itemize}
+\item Data: \textit{date} \hfill 
+\item Ora: \textit{int} \hfill  
+\end{itemize}
+Chiave primaria: \underline{(CodCampo,Data,Ora)} \hfill 
+\end{description}
+
+
+
+
+
+\section{Lista delle Associazioni}
+\section{Descrizione della Gerarchia}
+\section{Vincoli di Integrità aggiuntivi}
+\section{Schema concettuale E-R}
