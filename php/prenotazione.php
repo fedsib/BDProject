@@ -1,20 +1,17 @@
 <?php 
 	session_start();
-	require "./functions/phpfunctions.php" 
+	require "./cgi-bin/phpfunctions.php" 
 	
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it" lang="it">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
 <head> 		
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
 	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
-
 </head>
-
 <body>
 	<div id="header"> 
 
@@ -27,7 +24,6 @@
 		?>
 	</p>
 	<p>Ti trovi in: Prenotazione Campi</p>
-
 	</div>
 
     <div id="nav"> 
@@ -41,10 +37,14 @@
 	
 	
 		<?php
+		//Pagina per la gestione delle prenotazioni personali
+		
+		//Controllo che sia stati fatto il login
 		if (!isset($_SESSION['User'])) {
 			
 			echo '<p>Bisogna effettuare il login come utente od amministratore per vedere questa pagina.';
 			
+		//Se si sceglie di cancellare una delle proprio prenotazioni la elimino dal DB
 		} elseif (isset($_POST['Cancella'])) {
 		$data = $_POST['data'];
 		$ora = $_POST['ora'];
@@ -52,15 +52,16 @@
 		
 		$conn = connessione();
 		$sql = "DELETE FROM PRENOTAZIONE WHERE CodCampo='$campo' AND Data='$data' AND Ora='$ora'";
-		$result = $conn->query($sql) or die("Errore nella query MySQL 1");
+		$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 		echo 'Prenotazione Cancellata con successo.<br />
 		<a href="prenotazione.php">Torna Indietro</a>';
 		
+		//Quando selezione la prenotazione da fare la aggiungo al DB
 		} elseif (isset($_POST['Prenotazione'])) {
 			
 			$conn = connessione();
 			$sql = "SELECT PERSONA.CodFiscale FROM ACCOUNT JOIN PERSONA ON ACCOUNT.CodFiscale = PERSONA.CodFiscale WHERE ACCOUNT.UserName = '".$_SESSION['User']."'";
-			$result = $conn->query($sql) or die("Errore nella query MySQL 2");
+			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 			if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
 				$cod = $row['CodFiscale'];
@@ -69,13 +70,13 @@
 				$data = $_POST['data'];
 				$ora = $_POST['ora'];
 				$sql = "INSERT INTO PRENOTAZIONE (CodFiscale, CodCampo, Data, Ora) VALUES ('$cod','$campo','$data','$ora')";
-				$result = $conn->query($sql) or die("Errore nella query MySQL 3");
+				$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 				echo 'Prenotazioni aggiunta con successo.<br /><br /><a href="prenotazione.php">Torna Indietro</a>';
 				
 			} else {
 				echo 'Errore utente non trovato, prova a rieffettuare il login<br /><a href="logout.php">Torna Indietro</a>';
 			}
-			
+		//Se scelgo di effettuare una nuova prenotazione mostro la pagina col calendario e le possibilita' di scelta	
 		} elseif ((isset($_GET['action'])) && ($_GET['action'] == 'nuova') ) {
 			
 			$dataoggi = date('Y-m-d');
@@ -83,7 +84,7 @@
 			
 			$conn = connessione();
 			$sql = "SELECT CAMPO.TipoSup FROM CAMPO";
-				$result = $conn->query($sql) or die("Errore nella query MySQL 4");
+				$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 			if (($result->num_rows) > 0) {
 				$numrighe = $result->num_rows;
 				while($row = $result->fetch_assoc()) {
@@ -103,12 +104,11 @@
 						<input type="hidden" value="'.$datacal.'" name="data">
 						<select name="ora">';
 					for ($z = 9; $z <= 17; $z++) {
-						
 						$sql = "SELECT PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo 
 						FROM 
 						PRENOTAZIONE 
 						WHERE PRENOTAZIONE.CodCampo = '$x' AND PRENOTAZIONE.Data = '$datacal' AND PRENOTAZIONE.Ora = '$z'";
-						$result = $conn->query($sql) or die("Errore nella query MySQL 5");
+						$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 						if (!($result->num_rows)) {
 							if ($z < 10) {	
 								$orario = "0".$z.".00";
@@ -130,7 +130,8 @@
 				echo '</tr>';
 			} 
 			chiusura($conn);
-			echo '</table>';
+			echo '</table><br /><form action="prenotazione.php"><button >Torna Indietro</button></form>';
+			//Se apro solo la pagina mostro la lista delle prenotazioni dell'utente che attualmetne vede la pagina
 		} else {
 
 		$dataoggi = date("Y-m-d");
@@ -140,8 +141,8 @@
 		FROM 
 		ACCOUNT 
 		JOIN PRENOTAZIONE ON ACCOUNT.CodFiscale=PRENOTAZIONE.CodFiscale
-		WHERE ACCOUNT.UserName ='".$_SESSION['User']."' AND PRENOTAZIONE.Data >= '$dataoggi'";
-		$result = $conn->query($sql) or die("Errore nella query MySQL 5");
+		WHERE ACCOUNT.UserName ='".$_SESSION['User']."' AND PRENOTAZIONE.Data >= '$dataoggi' ORDER BY PRENOTAZIONE.Data, PRENOTAZIONE.Ora";
+		$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 		$numrighe = $result->num_rows;
 		echo "Attenzione si possono avere solo 7 prenotazioni attive.<br /><br />";
 		echo "<table>";
@@ -173,7 +174,7 @@
 		}
 		
 		if ( $numrighe < 7) {
-		echo '<br /><a href="prenotazione.php?action=nuova">Aggiungi nuova prenotazione</a>';
+		echo '<br /><form action="" method="get"><button name="action" value="nuova">Aggiungi nuova prenotazione</button></form>';
 		} else {
 			echo '<br /><p>Non puoi effettuare altre prenotazioni al momento.</p>';
 		}
@@ -185,15 +186,6 @@
 		
 		
 	</div>
-
-	<div id="footer">
-		<ul>
-			<li id="footleft"><a href="chisiamo.html">Chi Siamo</a></li>
-			<li id="footmid" accesskey="C"><a href="contatti.html">Contatti</a></li>
-			<li id="footmid" accesskey="3"><a href="mappa.html">Mappa del sito</a></li> 
-			<li id="footright"><a href="notelegali.html">Note Legali</a></li>         
-		</ul> 
-    </div>
 </body>
 
 </html>

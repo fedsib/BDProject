@@ -1,20 +1,17 @@
 <?php 
 	session_start();
-	require "./functions/phpfunctions.php" 
+	require "./cgi-bin/phpfunctions.php" 
 	
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it" lang="it">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
 <head> 		
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
 	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
-
 </head>
-
 <body>
 	<div id="header"> 
 
@@ -26,8 +23,7 @@
 			loginlink();
 		?>
 	</p>
-	<p>Ti trovi in: <span xml:lang="en">Home</span></p>
-
+	<p>Ti trovi in: Gestione Corsi -> Aggiungi Lezione</p>
 	</div>
 
     <div id="nav"> 
@@ -39,8 +35,10 @@
 	<div id="content"> 
 
 	
-	
 		<?php
+		//Pagina per l'aggiunta di lezioni ad un corso
+		
+		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
 		if (!isset($_SESSION['User']) || ($_SESSION['User']) != "admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';

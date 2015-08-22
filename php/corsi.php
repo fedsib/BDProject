@@ -1,20 +1,17 @@
 <?php 
 	session_start();
-	require "./functions/phpfunctions.php" 
+	require "./cgi-bin/phpfunctions.php" 
 	
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it" lang="it">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
 <head> 		
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
 	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
-
 </head>
-
 <body>
 	<div id="header"> 
 
@@ -26,8 +23,7 @@
 			loginlink();
 		?>
 	</p>
-	<p>Ti trovi in: Iscrizione Corsi</p>
-
+	<p>Ti trovi in: Gestione Corsi</p>
 	</div>
 
     <div id="nav"> 
@@ -41,14 +37,18 @@
 	
 	<?php
 	
+	//Controllo che l'utente sia loggato
 	if (!isset($_SESSION['User'])) {
 			
 			echo '<p>Bisogna effettuare il login come utente od amministratore per vedere questa pagina.';
 			
+			
+	//Controllo che non sia un admin, solo i socio possono iscriversi ai corso
 	} elseif (($_SESSION['Tipo']) == "Admin") { 
 	
 			echo '<p>Solo gli utenti possono iscriversi ai corsi, per vedere/gestire i corsi <a href="gcorsi.php">clicca qui</a>.';
 		
+	//Se ha selezionato mostra tutti i corso cerco nel DB tutti i corsi attivi con i rispettivi istruttori e segnale se l'utente è già iscritto o meno
 	} elseif ((isset($_GET['action'])) && ($_GET['action']) =="vedi" ) {
 		
 		$conn = connessione();
@@ -67,7 +67,7 @@ ON CORSO.CodCorso = ACCISC.CodCorso WHERE CORSO.Attivo='1'";
 				echo "<td>".$row['Nome']." ".$row['Cognome']."</td>";
 				echo "<td>";
 				if ($row['UserName']) { echo "ISCRITTO"; } echo "</td>";
-				echo '<td><a href="informazionicorso.php?action='.$row['CodCorso'].'">Informazioni sul corso</a></td></tr>';
+				echo '<td><form action="informazionicorso.php" method="get"><button name="action" value="'.$row['CodCorso'].'">Informazioni sul corso</button></form></td></tr>';
 				}
 				echo "</table>";
 		} else {
@@ -75,7 +75,7 @@ ON CORSO.CodCorso = ACCISC.CodCorso WHERE CORSO.Attivo='1'";
 			echo "<p>Nessun corso disponibile.</p>";
 			
 		}
-		
+	//Se l'utente ha appena aperto la pagina mostro semplicemente la lista dei corsi a cui lui è iscritto con rispettivi istruttori del corso
 	} else {
 		
 		$conn = connessione();
@@ -93,7 +93,7 @@ WHERE ACCOUNT.UserName='".$_SESSION['User']."'";
 				echo '<td>'.$row['TipoCorso'].'</td>';
 				echo "<td>".$row['Nome']." ".$row['Cognome'];
 				echo '</td>';
-				echo '<td><a href="informazionicorso.php?action='.$row['CodCorso'].'">Informazioni sul corso</a></td></tr>';
+				echo '<td><form action="informazionicorso.php" method="get"><button name="action" value="'.$row['CodCorso'].'">Informazioni sul corso</button></form></td></tr>';
 			}
 			echo "</table>";
 		} else {
@@ -102,7 +102,7 @@ WHERE ACCOUNT.UserName='".$_SESSION['User']."'";
 			
 		}
 		
-		echo '<a href="corsi.php?action=vedi">Vedi tutti i corsi</a>';
+		echo '<form action="corsi.php" method="get"><button name="action" value="vedi">Vedi tutti i corsi</button></form>';
 
 	}
 	
@@ -116,15 +116,6 @@ WHERE ACCOUNT.UserName='".$_SESSION['User']."'";
 		
 		
 	</div>
-
-	<div id="footer">
-		<ul>
-			<li id="footleft"><a href="chisiamo.html">Chi Siamo</a></li>
-			<li id="footmid" accesskey="C"><a href="contatti.html">Contatti</a></li>
-			<li id="footmid" accesskey="3"><a href="mappa.html">Mappa del sito</a></li> 
-			<li id="footright"><a href="notelegali.html">Note Legali</a></li>         
-		</ul> 
-    </div>
 </body>
 
 </html>

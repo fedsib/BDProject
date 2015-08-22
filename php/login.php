@@ -1,36 +1,32 @@
 <?php 
 	session_start();
-	require './functions/phpfunctions.php';
+	require "./cgi-bin/phpfunctions.php" 
+	
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it" lang="it">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
 <head> 		
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
 	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
-
 </head>
-
 <body>
 	<div id="header"> 
 
 	</div> 
 
 	<div id="barrasup">
-
 	<p id="login">
 		<?php
 			loginlink();
 		?>
 	</p>
-
-	<p>Ti trovi in: <span xml:lang="en">Home</span></p>
-		
+	<p>Ti trovi in: Login</p>
 	</div>
-	    <div id="nav"> 
+
+    <div id="nav"> 
 		<?php
 			menu();
 		?>
@@ -38,40 +34,39 @@
 	
 	<div id="content"> 
 	<?php 
-		//Funzione per il login
+		//Funzione per il login dopo che è stato premuto il tasto di invio User/Pass
 		if(isset($_POST['Submit'])){
 		
-		//Inizializzo variabili che vengono usate
+		//Inizializzo variabili che vengono usate per il login
 		$msg = "";
 		$errore = FALSE;
 		$User = $_POST['Username'];
 		$Pass = SHA1($_POST['Password']);
 		
 		//Controllo che nome utente e password usino solo i caratteri ammessi
-		
 		if (! preg_match('/^[a-zA-Z]*$/', $User)) {
 		$msg = $msg."<b>Errore! Il nome utente può contenere solo lettere</b><br />";
 		$errore=TRUE;
 		};
 	
-
 		if (! preg_match('/^[a-zA-Z0-9]*$/', $Pass)) {
 		$msg = $msg."<b>Errore! La Password può contenere solo lettere e numeri</b><br />";
 		$errore=TRUE;
 		};
 		
-		//Se nome utente e password usano caratteri ammessi procedo con la connessione ed il login
+		//Se nome utente e password usano caratteri ammessi procedo con la connessione ed il recupero dei dati dal DB
 		if(!$errore){
 		$conn = connessione();
 		$sql = "SELECT Admin, Hash FROM ACCOUNT WHERE UserName='$User'";
-		$result = $conn->query($sql) or die("Errore nella query MySQL");
+		$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
 				$admin = $row['Admin'];
 				$Hash = $row['Hash'];
 		}
 		}
-		//Controllo che la password corrisponda all'account
+		
+		//Confronto l'hash della password con quella salvata nel DB a quell'username
 			if ($Pass == $Hash) {
 				if ($admin) { $_SESSION['Tipo'] = "Admin"; } else { $_SESSION['Tipo'] = "User"; };
 				$_SESSION['User']=$User;
@@ -112,21 +107,13 @@
 			}
 			echo '</table></form>'; 
 			} else {
+			//Altrimenti avviso che il login è già stato effettuato come e mostro il nome utente
 			echo 'Hai già effetuato il login come: '. $_SESSION['User'];
 		} 
 
 	?>
  
 	</div>
-
-	<div id="footer">
-		<ul>
-			<li id="footleft"><a href="chisiamo.html">Chi Siamo</a></li>
-			<li id="footmid" accesskey="C"><a href="contatti.html">Contatti</a></li>
-			<li id="footmid" accesskey="3"><a href="mappa.html">Mappa del sito</a></li> 
-			<li id="footright"><a href="notelegali.html">Note Legali</a></li>         
-		</ul> 
-    </div>
 </body>
 
 </html>

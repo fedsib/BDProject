@@ -1,20 +1,17 @@
 <?php 
 	session_start();
-	require "./functions/phpfunctions.php" 
+	require "./cgi-bin/phpfunctions.php" 
 	
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it" lang="it">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
 <head> 		
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
 	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
-
 </head>
-
 <body>
 	<div id="header"> 
 
@@ -26,12 +23,11 @@
 			loginlink();
 		?>
 	</p>
-	<p>Ti trovi in: Informazioni Corso</p>
-
+	<p>Ti trovi in: Gestione Corsi -> Informazione Corso</p>
 	</div>
 
     <div id="nav"> 
-				<?php
+		<?php
 			menu();
 		?>
     </div>
@@ -41,12 +37,19 @@
 	
 	
 <?php
+			//Mostra le informazioni del corso selezionato
+			
+			//Bisogna effettuare il login come utente per vedere questa pagina
 			if (!isset($_SESSION['User'])) {
 			
 			echo '<p>Bisogna effettuare il login come utente od amministratore per vedere questa pagina.</p>';
 			
-			
-		} elseif ((isset($_GET['action'])) && (isset($_POST['Iscrizione']))) {
+			//Controllo che non sia un admin, solo i soci possono essere iscritti ai corsi
+			} elseif (($_SESSION['Tipo']) == "Admin") { 
+	
+			echo '<p>Solo gli utenti possono iscriversi ai corsi, per vedere/gestire i corsi <a href="gcorsi.php">clicca qui</a>.';
+			//Se e' stato inviato il form con il comando di iscrizione la eseguo
+			} elseif ((isset($_GET['action'])) && (isset($_POST['Iscrizione']))) {
 			
 			$conn = connessione();
 			$codcorso = $_GET['action'];
@@ -63,19 +66,19 @@ JOIN ACCOUNT ON
 ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale 
 WHERE ACCOUNT.UserName = '".$_SESSION['User']."'  
 AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
-			$result = $conn->query($sql) or die("Errore nella query MySQL 4");
+			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 				if ($result->num_rows > 0) {
 					while($row = $result->fetch_assoc()) {
 						$codfiscale = $row['CodFiscale'];
 					}
 				$sql1 = "INSERT INTO ISCRITTOCORSO (CodCorso, CodFiscale) VALUES ('".$codcorso."','".$codfiscale."')";
-				$conn->query($sql1) or die("Errore nella query MySQL 5");
+				$conn->query($sql1) or die("Errore nella query MySQL: ".$conn->error);
 					
-					echo "<p>Iscritto al corso con successo</p>";
+					echo '<p>Iscritto al corso con successo. <a href="corsi.php">Torna Indietro</p>';
 				} else {
 					echo "<p>Impossibile iscrivere l'utente al corso selezionato. L'utente potrebbe essere già iscritto oppure un amministratore</p>";
 				}
-			
+			//Se e' stato inviato il form con il comando di cancellazione lo eseguo
 		} elseif ((isset($_GET['action'])) && (isset($_POST['Cancella']))) {
 			
 			$conn = connessione();
@@ -92,13 +95,13 @@ JOIN ACCOUNT ON
 ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale 
 WHERE ACCOUNT.UserName = '".$_SESSION['User']."'  
 AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
-			$result = $conn->query($sql) or die("Errore nella query MySQL 6");
+			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 				if ($result->num_rows > 0) {
 					while($row = $result->fetch_assoc()) {
 						$codfiscale = $row['CodFiscale'];
 					}
 				$sql1 = "DELETE FROM ISCRITTOCORSO WHERE ISCRITTOCORSO.CodCorso = '".$codcorso."' AND ISCRITTOCORSO.CodFiscale = '".$codfiscale."'";
-				$conn->query($sql1) or die("Errore nella query MySQL 7");
+				$conn->query($sql1) or die("Errore nella query MySQL: ".$conn->error);
 					
 					echo "<p>Eliminato dal corso con successo</p>";
 				} else {
@@ -107,15 +110,15 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 			
 			
 			
-			
+			//Mostro la parte principale della pagina con le informazioni del corso, informazioni delle lezioni ed un bottone per iscriversi o cancellare l'iscrizione al corso
 		}elseif ((isset($_GET['action']))) {
-			
+			//Mostro le informazioni del Corso
 			$codcorso = ($_GET['action']);
 			$conn = connessione();
 			$sql = "SELECT CORSO.CodCorso, CORSO.NomeCorso, CORSO.TipoCorso, PERSONA.Nome, PERSONA.Cognome
 			FROM CORSO
 			JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale WHERE CORSO.CodCorso ='".$codcorso."' AND CORSO.Attivo = '1'";
-			$result = $conn->query($sql) or die("Errore nella query MySQL 1");
+			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 		if ($result->num_rows > 0) {
 			echo '<table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2"><tr><th width="50%" colspan="2">Nome del Corso</th><th width="25%">Livello Corso</th><th width="25%">Istruttore</th></tr>';
 			while($row = $result->fetch_assoc()) {
@@ -124,9 +127,9 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 				echo "<td>".$row['Nome']." ".$row['Cognome'];
 				echo '</td></tr>';
 			}
-			
+			//Mostro le lezioni presenti e se sono gia' state fissate con la data o meno
 			$sql = "SELECT LEZIONE.CodLezione, PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo FROM LEZIONE LEFT JOIN PRENOTAZIONE ON LEZIONE.CodLezione = PRENOTAZIONE.CodLezione WHERE LEZIONE.CodCorso ='".$codcorso."' ORDER BY LEZIONE.CodLezione";
-			$result = $conn->query($sql) or die("Errore nella query MySQL 2");
+			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 			if ($result->num_rows > 0) {
 				echo '<tr><th width="25%">Lez.N.</th><th width="25%">Campo N.</th><th width="25%">Data</th><th width="25%">Ora</th></tr>';
 				while($row = $result->fetch_assoc()) {
@@ -135,17 +138,17 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 				} else { echo '<tr><td>'.$row['CodLezione'].'</td><td colspan="3">Lezione non ancora prenotata</td></tr>';}
 				}
 			} else { echo '<tr><b><td height="50px"colspan="4">Lezioni non ancora disponibili.</b></td></tr>';}
-			
+			//Se l'utente e' iscritto mostro il bottone per cancellare l'iscrizione altrimenti per iscriversi al corso
 			$sql = "SELECT ISCRITTOCORSO.CodCorso FROM ISCRITTOCORSO JOIN ACCOUNT ON ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale WHERE ISCRITTOCORSO.CodCorso ='$codcorso' AND ACCOUNT.UserName='".$_SESSION['User']."'";
-			$result = $conn->query($sql) or die("Errore nella query MySQL 3");
+			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 			if ($result->num_rows > 0) {
 				
-				echo '<tr><td colspan="4" height="50"><form action="" method="post"><input name="Cancella" type="submit" value="Cancella iscrizione al corso"/></form></td></tr>' ;
+				echo '<tr><td colspan="3" height="50"><form action="" method="post"><input name="Cancella" type="submit" value="Cancella iscrizione al corso"/></form></td>' ;
 			} else {
 				
-				echo '<tr><td colspan="4" height="50"><form action="" method="post"><input name="Iscrizione" type="submit" value="Iscriviti a questo corso"/></form></td></tr>' ;
+				echo '<tr><td colspan="3" height="50"><form action="" method="post"><input name="Iscrizione" type="submit" value="Iscriviti a questo corso"/></form></td>' ;
 			}
-			echo "</table>";
+			echo '<td><form action="corsi.php"><button >Torna indietro</button></form></td></tr>/table>';
 			
 		} else { echo '<p>Corso non trovato <a href="corsi.php?action=vedi">Torna Indietro.</a></p>';}
 			
@@ -168,15 +171,6 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 		
 		
 	</div>
-
-	<div id="footer">
-		<ul>
-			<li id="footleft"><a href="chisiamo.html">Chi Siamo</a></li>
-			<li id="footmid" accesskey="C"><a href="contatti.html">Contatti</a></li>
-			<li id="footmid" accesskey="3"><a href="mappa.html">Mappa del sito</a></li> 
-			<li id="footright"><a href="notelegali.html">Note Legali</a></li>         
-		</ul> 
-    </div>
 </body>
 
 </html>

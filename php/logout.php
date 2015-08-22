@@ -1,5 +1,7 @@
-<?php session_start(); /* Starts the session */
-session_destroy(); /* Destroy started session */
-header("location:index.php");  /* Redirect to login page */
+<?php 
+//Distruggo la sessione corrende e redirigo l'utente all'home page
+session_start();
+session_destroy();
+header("location:index.php"); 
 exit;
 ?>
