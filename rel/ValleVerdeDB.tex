@@ -22,9 +22,11 @@
 
 \newcommand*{\plogo}{\fbox{$\mathcal{PL}$}} % Generic publisher logo
 \usepackage{listings}
+\usepackage{color}
 \usepackage{fancyhdr}
 
 \usepackage{ragged2e}
+\usepackage{listings}
 
 \setlength{\voffset}{-0.5in}
 \setlength{\topmargin}{-0.2in}
@@ -105,6 +107,36 @@
 
 \setlength{\parindent}{0pt}
 
+%----------------------------------------------------------------------------------------
+%	CODE FORMAT
+%----------------------------------------------------------------------------------------
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ 
+backgroundcolor=\color{white},
+basicstyle=\footnotesize,
+breakatwhitespace=true,
+breaklines=true,
+captionpos=b, 
+commentstyle=\color{mygreen},
+frame=single,	 
+keepspaces=true,   
+keywordstyle=\color{blue}, 
+numbers=left,    
+numbersep=5pt,
+numberstyle=\tiny\color{mygray},
+rulecolor=\color{black},
+showspaces=false, 
+showstringspaces=false, 
+showtabs=false,
+stepnumber=4,
+stringstyle=\color{mymauve},
+tabsize=4,
+title=\lstname 
+}
 
 %----------------------------------------------------------------------------------------
 %	CONTENT
