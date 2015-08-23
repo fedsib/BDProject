@@ -40,7 +40,7 @@ CREATE TABLE CORSO (
 ) ENGINE=InnoDB;
 
 CREATE TABLE CAMPO (
- CodCampo int NOT NULL,
+ CodCampo tinyint NOT NULL,
  TipoSup enum('Terra Rossa','Erba Sintetica','PlayIt') NOT NULL,
  PRIMARY KEY (CodCampo)
 ) ENGINE=InnoDB;
@@ -64,7 +64,7 @@ CREATE TABLE PRENOTAZIONE (
  CodCorso int DEFAULT NULL,
  CodLezione int DEFAULT NULL,
  CodFiscale char(16) DEFAULT NULL,
- CodCampo int NOT NULL,
+ CodCampo tinyint NOT NULL,
  Data date NOT NULL,
  Ora int NOT NULL,
  PRIMARY KEY (CodCampo,Data,Ora),
