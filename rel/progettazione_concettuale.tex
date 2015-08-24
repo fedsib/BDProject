@@ -87,7 +87,7 @@ Chiave primaria: \underline{(CodCampo,Data,Ora)} \hfill
 \item \textsc{Socio - Corso:} \textbf{IscrittoCorso}
 \begin{itemize}
 \item Un socio è iscritto a zero o più corsi, un corso ha zero o più soci iscritti
-\item Molteplicità: 1:N
+\item Molteplicità: N:M
 \item Totalità: Parziale ambo i lati
 \end{itemize}
 \item \textsc{Corso - Lezione:} \textbf{CompostoDa}
@@ -102,11 +102,11 @@ Chiave primaria: \underline{(CodCampo,Data,Ora)} \hfill
 \item Molteplicità: 1:1
 \item Totalità: Totale da Prenotazione a Campo, parziale da Campo a Prenotazione 
 \end{itemize}
-\item \textsc{Prenotazione – Lezione:} \textbf{Fissa}
+\item \textsc{Prenotazione – Lezione:} \textbf{Crea}
 \begin{itemize}
-\item Una prenotazione fissa zero o una lezione, una lezione viene fissata da una prenotazione. Possono esserci lezioni per le quali non è ancora stata effettuata una prenotazione.
+\item Una prenotazione crea zero o una lezione, una lezione viene creata da una prenotazione.
 \item Molteplicità: 1:1
-\item Totalità: Parziale ambo i lati
+\item Totalità: Parziale da Prenotazione a Lezione, Totale da Lezione a Prenotazione
 \end{itemize}
 \end{itemize}
 

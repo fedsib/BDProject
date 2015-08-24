@@ -40,12 +40,12 @@
 		//Inizializzo variabili che vengono usate per il login
 		$msg = "";
 		$errore = FALSE;
-		$User = $_POST['Username'];
-		$Pass = SHA1($_POST['Password']);
+		$User = trim($_POST['Username']);
+		$Pass = SHA1(trim($_POST['Password']));
 		
 		//Controllo che nome utente e password usino solo i caratteri ammessi
-		if (! preg_match('/^[a-zA-Z]*$/', $User)) {
-		$msg = $msg."<b>Errore! Il nome utente può contenere solo lettere</b><br />";
+		if (! preg_match('/^[a-zA-Z0-9]*$/', $User)) {
+		$msg = $msg."<b>Errore! Il nome utente può contenere solo lettere e numeri</b><br />";
 		$errore=TRUE;
 		};
 	
@@ -64,7 +64,7 @@
 				$admin = $row['Admin'];
 				$Hash = $row['Hash'];
 		}
-		}
+		
 		
 		//Confronto l'hash della password con quella salvata nel DB a quell'username
 			if ($Pass == $Hash) {
@@ -80,6 +80,7 @@
 		}
 		}
 		
+		}
 		//Controllo se è già stato effettuato il login
 		if (!isset($_SESSION['User'])) {
 			//Se non è stato fatto mostro il form di login
@@ -109,7 +110,7 @@
 			} else {
 			//Altrimenti avviso che il login è già stato effettuato come e mostro il nome utente
 			echo 'Hai già effetuato il login come: '. $_SESSION['User'];
-		} 
+			}	
 
 	?>
  

@@ -164,7 +164,7 @@
 			<td align="right">Retribuzione *</td>
 			<td colspan="2"><input name="Retribuzione" type="text" class="Input" value="'; if(isset($retribuzione)){ echo "$retribuzione"; } echo'"></td></tr>
 			<tr>
-			<td colspan="2"><button name="aggiungi" type="submit" value="aggiungi">Aggiungi Utente</button></form></td><td><form action="gutenti.php"><button >Annulla</button></form></td>
+			<td colspan="2"><button name="aggiungi" type="submit" value="aggiungi">Aggiungi Utente</button></form></td><td><form action="gutenti.php"><button type="submit">Annulla</button></form></td>
 			</tr>
 			<tr><td colspan="3">*Questi campi non possono essere vuoti</td></tr>
 			<tr><td colspan="3">'.$msg.'</td></tr>

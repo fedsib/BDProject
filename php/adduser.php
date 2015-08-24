@@ -40,7 +40,7 @@
 		//Pagina per l'aggiunta di un utente
 		
 		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
-		if (!isset($_SESSION['User']) || ($_SESSION['User']) != "admin") {
+		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
 			

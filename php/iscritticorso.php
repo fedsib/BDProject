@@ -87,9 +87,9 @@
 						</td></tr>';
 					}
 					echo '</table>';
-				} else { echo '<p>Nessun Iscritto</p>';}
+				} else { echo '<p><br /><br />Nessun Iscritto</p>';}
 				
-				echo '<p><br /><form action="gestiscicorso.php" method="get"><button name="action" value="'.$codcorso.'">Torna Indietro</button></form></p>';
+				echo '<p><br /><a href="gestiscicorso.php?action='.$codcorso.'">Torna Indietro</a></p>';
 				
 				} else {
 					echo '<p>Errone nel link <a href="gcorsi.php">torna indietro.</a></p>';

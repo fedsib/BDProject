@@ -58,16 +58,16 @@ LEFT JOIN
 (SELECT ACCOUNT.UserName, ISCRITTOCORSO.CodCorso FROM ACCOUNT JOIN ISCRITTOCORSO ON ACCOUNT.CodFiscale = ISCRITTOCORSO.CodFiscale WHERE ACCOUNT.UserName='".$_SESSION['User']."') AS ACCISC
 ON CORSO.CodCorso = ACCISC.CodCorso WHERE CORSO.Attivo='1'";
 		
-		$result = $conn->query($sql) or die("Errore nella query MySQL 1");
+		$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 		if ($result->num_rows > 0) {
-				echo '<table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2"><tr><th width="20%">Nome del Corso</th><th width="20%">Livello Corso</th><th width="20%">Istruttore</th><th width="20%"></th><th width="20%"></th></tr>';
+				echo '<table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2"><tr><th width="45%">Nome del Corso</th><th width="	15%">Livello Corso</th><th width="20%">Istruttore</th><th width="20%"></th></tr>';
 				while($row = $result->fetch_assoc()) {					
 				echo '<tr><td>'.$row['NomeCorso'].'</td>';
 				echo '<td>'.$row['TipoCorso'].'</td>';
 				echo "<td>".$row['Nome']." ".$row['Cognome']."</td>";
 				echo "<td>";
 				if ($row['UserName']) { echo "ISCRITTO"; } echo "</td>";
-				echo '<td><form action="informazionicorso.php" method="get"><button name="action" value="'.$row['CodCorso'].'">Informazioni sul corso</button></form></td></tr>';
+				echo '<td><a href="informazionicorso.php?action='.$row['CodCorso'].'">Informazioni sul corso</a></td></tr>';
 				}
 				echo "</table>";
 		} else {
@@ -85,15 +85,15 @@ JOIN ISCRITTOCORSO ON CORSO.CodCorso = ISCRITTOCORSO.CodCorso
 JOIN ACCOUNT ON ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale
 JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale
 WHERE ACCOUNT.UserName='".$_SESSION['User']."'";
-		$result = $conn->query($sql) or die("Errore nella query MySQL 2");
+		$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 		if ($result->num_rows > 0) {
-			echo '<table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2"><tr><th width="25%">Nome del Corso</th><th width="25%">Livello Corso</th><th width="25%">Istruttore</th><th></th></tr>';
+			echo '<table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2"><tr><th width="45%">Nome del Corso</th><th width="	15%">Livello Corso</th><th width="20%">Istruttore</th><th width="20%"></th></tr>';
 			while($row = $result->fetch_assoc()) {
 				echo '<tr><td>'.$row['NomeCorso'].'</td>';
 				echo '<td>'.$row['TipoCorso'].'</td>';
 				echo "<td>".$row['Nome']." ".$row['Cognome'];
 				echo '</td>';
-				echo '<td><form action="informazionicorso.php" method="get"><button name="action" value="'.$row['CodCorso'].'">Informazioni sul corso</button></form></td></tr>';
+				echo '<td><a href="informazionicorso.php?action='.$row['CodCorso'].'">Informazioni sul corso</a></td></tr>';
 			}
 			echo "</table>";
 		} else {
@@ -102,7 +102,7 @@ WHERE ACCOUNT.UserName='".$_SESSION['User']."'";
 			
 		}
 		
-		echo '<form action="corsi.php" method="get"><button name="action" value="vedi">Vedi tutti i corsi</button></form>';
+		echo '<br /><br /><br /><a href="corsi.php?action=vedi">Vedi tutti i corsi</a>';
 
 	}
 	

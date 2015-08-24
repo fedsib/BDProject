@@ -40,7 +40,7 @@
 		//Pagina per la modifica di un account admin
 		
 		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
-		if (!isset($_SESSION['User']) || ($_SESSION['User']) != "admin") {
+		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
 		//Se e' loggato come amministratore vedo i dati dell'istruttore selezionato
@@ -70,7 +70,7 @@
 				echo '<tr><td>Qualifica:</td><td>'.$row['Qualifica'].'</td></tr>';
 				echo '<tr><td>Retribuzione:</td><td>'.$row['Retribuzione'].'</td></tr>';
 				echo '<tr><td>Data Assunzione:</td><td>'.$row['DataAssunzione'].'</td></tr>';
-				echo '<tr><td><form action="" method="get"><button name="moddati" value="'.$user.'">Modifica Dati Personali</button></form></td><td><form action="gutenti.php"><button>Torna Indietro</button></form></tr>';
+				echo '<tr><td><a href="modadmin.php?moddati='.$user.'">Modifica Dati Personali</a></td><td><a href="gutenti.php">Torna Indietro</a></tr>';
 				
 				echo '<tr><td colspan="3" height="50"><form action="" method="post"><button name="reset" value="'.$row['CodFiscale'].'">Reset Password</button></form></td></tr>';
 				
@@ -107,8 +107,8 @@
 				$errore = false;
 				
 				$username = isset($_POST['username']) ? trim($_POST['username']) : '';
-				if ((! preg_match('/^[a-zA-Z]*$/', $username)) || $username == '') {
-				$msg = $msg."<b>Errore! Il nome puo' contenere solo lettere</b><br />";
+				if ((! preg_match('/^[a-zA-Z0-9]*$/', $username)) || $username == '') {
+				$msg = $msg."<b>Errore! Il nome puo' contenere solo lettere e numeri</b><br />";
 				$errore=TRUE;
 
 				};
@@ -259,7 +259,7 @@
 			}
 		}  else {
 			
-			echo '<tr><td>Errore nel link. <a href="gutenti.php">Torna Indietro</a></td></tr>';
+			echo '<tr><td>Errore nel link. <a href="gutenti.php">Torna IndietroTorna Indietro</a></td></tr>';
 
 		}
 		

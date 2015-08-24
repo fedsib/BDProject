@@ -69,9 +69,13 @@
 				$campo = $_POST['campo'];
 				$data = $_POST['data'];
 				$ora = $_POST['ora'];
-				$sql = "INSERT INTO PRENOTAZIONE (CodFiscale, CodCampo, Data, Ora) VALUES ('$cod','$campo','$data','$ora')";
+				$sql = "SELECT ControlloPrenotazione('$cod','$data','$ora','$campo')";
 				$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
-				echo 'Prenotazioni aggiunta con successo.<br /><br /><a href="prenotazione.php">Torna Indietro</a>';
+				if ($result->num_rows > 0) {
+				while($row = $result->fetch_row()) {
+				echo $row[0];
+				}
+				};
 				
 			} else {
 				echo 'Errore utente non trovato, prova a rieffettuare il login<br /><a href="logout.php">Torna Indietro</a>';
@@ -167,17 +171,46 @@
 			';
 		}
 		echo '</table>';
-			
+		
+
+
 
 		} else {
-			echo 'Nessuna prenotazione attiva al momento.';
+			echo 'Nessuna prenotazione personale attiva al momento.';
 		}
 		
 		if ( $numrighe < 7) {
-		echo '<br /><form action="" method="get"><button name="action" value="nuova">Aggiungi nuova prenotazione</button></form>';
+		echo '<p><br /><br /><a href="prenotazione.php?action=nuova">Aggiungi nuova prenotazione</a></p><br /><br /';
 		} else {
-			echo '<br /><p>Non puoi effettuare altre prenotazioni al momento.</p>';
+			echo '<br /><p>Non puoi effettuare altre prenotazioni al momento.</p><br /><br />';
 		}
+		
+		$datamax = date('Y-m-d', strtotime("$dataoggi +16 day"));
+		//Estraggo le prenotazioni relative ai corsi che si seguono o si tengono
+		$sql = "SELECT PRENOTAZIONE.CodCampo, PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCorso
+				FROM PRENOTAZIONE LEFT JOIN CORSO ON PRENOTAZIONE.CodCorso = CORSO.CodCorso LEFT JOIN ISCRITTOCORSO ON CORSO.CodCorso = ISCRITTOCORSO.CodCorso  JOIN ACCOUNT ON (ACCOUNT.CodFiscale = CORSO.CodFiscale OR ACCOUNT.CodFiscale = ISCRITTOCORSO.CodFiscale)
+				WHERE ACCOUNT.UserName = '".$_SESSION['User']."' AND PRENOTAZIONE.Data >= '$dataoggi' AND PRENOTAZIONE.Data <= '$datamax' ORDER BY PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo";
+		$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
+		$numrighe = $result->num_rows;
+		echo "<table>";
+		if ($result->num_rows > 0) {
+			echo '<table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2">
+			<tr><th colspan="4">Prossime lezioni dei Corsi (fino a 15 giorni)</th></tr>
+			<tr><td width="25%">Data</td><td width="25%">Ora</td><td width="25%">Campo</td><td width="25%"> </td></tr>';
+		while($row = $result->fetch_array()) {
+			echo '<tr><td width="25%">'.$row['Data'].'</td><td width="25%">'.$row['Ora'].'</td><td width="25%">'.$row['CodCampo'].'</td><td width="25%">';
+			if ($_SESSION['Tipo'] = "Admin") { 
+				echo '<a href="gestiscicorso.php?action='.$row['CodCorso'].'">Vedi Informazioni Corso</a>';
+			} else {
+				echo '<a href="informazionicorso.php?action='.$row['CodCorso'].'">Vedi Informazioni Corso</a>';
+			}
+			echo '</td></td></tr>';
+		}
+		echo '</table>';
+			
+
+		}
+		
 
 		}
 		

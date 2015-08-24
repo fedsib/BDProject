@@ -40,7 +40,7 @@
 		//Pagina per la gestione degli utenti
 		
 		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
-		if (!isset($_SESSION['User']) || ($_SESSION['User']) != "admin") {
+		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
 		
@@ -103,9 +103,9 @@
 			$tipo = 'tutti'; 
 			}
 			//mostro i bottoni per aprire le pagine di aggiunta utente/amministratore
-			echo '<table width="40%" border="0" align="center" cellpadding="10" cellspacing="5" style="float:right"><tr>
-			<td align="center"><br /><form name="adduser" action="adduser.php" method="get"><button type="submit">Aggiungi Utente</button></form><br /></td></tr><tr>
-			<td align="center"><form  name="addadmin" action="addadmin.php" method="get"><button type="submit">Aggiungi Amministratore</button></form></td></tr></table>';
+			echo '<table width="40%" border="0" align="center" cellpadding="10" cellspacing="10" style="float:right"><tr>
+			<td align="center"><br /><a href="adduser.php">Aggiungi Utente</a><br /></td></tr><tr>
+			<td align="center"><a href="addadmin.php">Aggiungi Amministratore</a></td></tr></table>';
 			//Mostro la tabella di ricerca degli utenti
 			echo '<table width="60%" border="0" align="center" cellpadding="10" cellspacing="5" style="float:left"><tr><th colspan="2">Ricerca</th></tr><form  name="cerca" action="" method="get">';
 			echo '<tr><td>Nome:</td><td><input name="nome" type="text" value="'.$nome.'"></input></td></tr>';
@@ -136,7 +136,7 @@
 			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 			
 			if ($result->num_rows > 0) {
-				echo '<table border="0" align="center" cellpadding="5" cellspacing="2" class="Table" width ="100%">';
+				echo '<table border="0" align="center" cellpadding="5" cellspacing="5" class="Table" width ="100%">';
 				echo '<tr><th  width="40%">Cognome/Nome</th><th width ="15%">Tipo</th><th width="30%">Username</th><th width="15%">Modifica</th></tr>';
 				while($row = $result->fetch_assoc()) {
 					echo '<tr>';
@@ -147,11 +147,9 @@
 					echo '<td>'.$row['UserName'].'</td>';
 					
 					if ($admin) {
-					echo '<td>
-					<form action="modadmin.php" method="get"><button name="vedi" type="submit" value="'.$row['UserName'].'">Vedi Dati</button></form></td>';
+					echo '<td><a href="modadmin.php?vedi='.$row['UserName'].'">Vedi Dati</a></td>';
 					} else {
-					echo '<td>
-					<form action="moduser.php" method="get"><button name="vedi" type="submit" value="'.$row['UserName'].'">Vedi Dati</button></form></td>';
+					echo '<td><a href="moduser.php?vedi='.$row['UserName'].'">Vedi Dati</a></td>';
 					}
 					echo '</tr>';
 				}

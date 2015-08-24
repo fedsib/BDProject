@@ -40,7 +40,7 @@
 		//Pagina per la modifica dei dati di un corso
 		
 		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
-		if (!isset($_SESSION['User']) || ($_SESSION['User']) != "admin") {
+		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
 			//Se e' stato inviato il form per la modifica dei dati controllo che siano corretti e li invio
@@ -133,7 +133,7 @@
 				echo '<tr><td colspan="2"><input type="radio" name="attivo" value="attivo" checked>Attivo<br /><input type="radio" name="attivo" value="nonattivo">Non Attivo</input></td></tr>'; 
 			}
 			
-			echo '<tr><td><input name="modifica" type="submit" value="Modifica Corso"/></form></td><td><form action="gestiscicorso.php" method="get"><button name="action" value="'.$codcorso.'">Torna Indietro</button></form></td></tr>';
+			echo '<tr><td><input name="modifica" type="submit" value="Modifica Corso"/></form></td><td><form action="gestiscicorso.php" method="get"><button name="action" value="'.$codcorso.'">Annulla</button></form></td></tr>';
 			echo '</table>';
 		
 		} else { echo '<br /><p>Errore nella ricerca informazioni del corso <a href="gcorsi.php">Torna indietro</a></p>';}

@@ -236,8 +236,8 @@
 				$errore = false;
 				
 				$username = isset($_POST['Username']) ? trim($_POST['Username']) : '';
-				if ((! preg_match('/^[a-zA-Z]*$/', $username)) || $username == '') {
-				$msg = $msg."<b>Errore! L'username puo' contenere solo lettere</b><br />";
+				if ((! preg_match('/^[a-zA-Z0-9]*$/', $username)) || $username == '') {
+				$msg = $msg."<b>Errore! L'username puo' contenere solo lettere e numeri</b><br />";
 				$errore=TRUE;
 
 				};
@@ -282,7 +282,7 @@
 			<td align="right">Ripeti Password</td>
 			<td><input name="RPassword" type="password" class="Input"></td>
 			</tr><td><button name="modifica" type="submit" value="'.$row['CodFiscale'].'" class="Button">Modifica</button></form></td>
-			<td><form action="utenti.php"><button >Torna Indietro</button></form></td>
+			<td><form action="utenti.php"><button >Annulla</button></form></td>
 			</tr>';
 			if(isset($msg)){
 				echo '<tr>
@@ -345,9 +345,8 @@
 				if ($admin) { echo '<tr><td>Qualifica:</td><td>'.$row['Qualifica'].'</td></tr>';
 				echo '<tr><td>Retribuzione:</td><td>'.$row['Retribuzione'].'</td></tr>';
 				echo '<tr><td>Data Assunzione:</td><td>'.$row['DataAssunzione'].'</td></tr>'; }
-				echo '<tr><td><form action="" method="get"><button name="moddati" value="mod">Modifica Dati Personali</button></form></td></tr>';
-				echo '<tr><td><form action="" method="get"><button name="moduspa" value="mod">Modifica Username e Password</button></form></td></tr>';
-				
+				echo '<tr><td><a href="utenti.php?moddati=mod">Modifica Dati Personali</a></td></tr>';
+				echo '<tr><td><a href="utenti.php?moduspa=mod">Modifica Username e Password</a></td></tr>';
 				echo '<tr><td colspan="3" height="50"></td></tr><tr><td colspan="3" height="50"><form action="" method="post"><button name="cancella" value="'.$row['CodFiscale'].'">Cancella Account</button></form> Cancella tutte le informazioni dell\'utente</td></tr>';
 			}
 				

@@ -74,7 +74,7 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 				$sql1 = "INSERT INTO ISCRITTOCORSO (CodCorso, CodFiscale) VALUES ('".$codcorso."','".$codfiscale."')";
 				$conn->query($sql1) or die("Errore nella query MySQL: ".$conn->error);
 					
-					echo '<p>Iscritto al corso con successo. <a href="corsi.php">Torna Indietro</p>';
+					echo '<p>Iscritto al corso con successo. <a href="corsi.php">Torna Indietro</a></p>';
 				} else {
 					echo "<p>Impossibile iscrivere l'utente al corso selezionato. L'utente potrebbe essere già iscritto oppure un amministratore</p>";
 				}
@@ -127,16 +127,19 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 				echo "<td>".$row['Nome']." ".$row['Cognome'];
 				echo '</td></tr>';
 			}
-			//Mostro le lezioni presenti e se sono gia' state fissate con la data o meno
-			$sql = "SELECT LEZIONE.CodLezione, PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo FROM LEZIONE LEFT JOIN PRENOTAZIONE ON LEZIONE.CodLezione = PRENOTAZIONE.CodLezione WHERE LEZIONE.CodCorso ='".$codcorso."' ORDER BY LEZIONE.CodLezione";
+			//Mostro le lezioni presenti
+			$sql = "SELECT PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo FROM PRENOTAZIONE WHERE PRENOTAZIONE.CodCorso ='".$codcorso."' ORDER BY - PRENOTAZIONE.Data DESC, - PRENOTAZIONE.Ora DESC";
 			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 			if ($result->num_rows > 0) {
 				echo '<tr><th width="25%">Lez.N.</th><th width="25%">Campo N.</th><th width="25%">Data</th><th width="25%">Ora</th></tr>';
+				$numlezione = 1;
 				while($row = $result->fetch_assoc()) {
-				if ($row['CodCampo'] != NULL) {
-					echo '<tr><td>'.$row['CodLezione'].'</td><td>'.$row['CodCampo'].'</td><td>'.$row['Data'].'</td><td>'.$row['Ora'].'</td></tr>';
-				} else { echo '<tr><td>'.$row['CodLezione'].'</td><td colspan="3">Lezione non ancora prenotata</td></tr>';}
+				
+					echo '<tr><td>'.$numlezione.'</td><td>'.$row['CodCampo'].'</td><td>'.$row['Data'].'</td><td>'.$row['Ora'].'</td></tr>';
+				
+				$numlezione++;
 				}
+				
 			} else { echo '<tr><b><td height="50px"colspan="4">Lezioni non ancora disponibili.</b></td></tr>';}
 			//Se l'utente e' iscritto mostro il bottone per cancellare l'iscrizione altrimenti per iscriversi al corso
 			$sql = "SELECT ISCRITTOCORSO.CodCorso FROM ISCRITTOCORSO JOIN ACCOUNT ON ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale WHERE ISCRITTOCORSO.CodCorso ='$codcorso' AND ACCOUNT.UserName='".$_SESSION['User']."'";
@@ -145,10 +148,22 @@ AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 				
 				echo '<tr><td colspan="3" height="50"><form action="" method="post"><input name="Cancella" type="submit" value="Cancella iscrizione al corso"/></form></td>' ;
 			} else {
-				
+				//Controllo se il livello abilita' dell'utente e' sufficiente per il corso che visualizza
+				$sql = "SELECT PossoIscrivermi('".$_SESSION['User']."','$codcorso')";
+				$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
+				if ($result->num_rows > 0) {
+					while($row = $result->fetch_row()) {
+						$msg = $row[0];
+					}
+					
+					if ($msg == "Iscriviti") {
 				echo '<tr><td colspan="3" height="50"><form action="" method="post"><input name="Iscrizione" type="submit" value="Iscriviti a questo corso"/></form></td>' ;
+					} else {
+						echo '<tr><td colspan="3" height="50">'.$msg.'</td>';
+					}
+				}
 			}
-			echo '<td><form action="corsi.php"><button >Torna indietro</button></form></td></tr>/table>';
+			echo '<td><a href="corsi.php">Torna Indietro</a></td></tr></table>';
 			
 		} else { echo '<p>Corso non trovato <a href="corsi.php?action=vedi">Torna Indietro.</a></p>';}
 			

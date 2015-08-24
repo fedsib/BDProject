@@ -40,7 +40,7 @@
 		//Pagina per la modifica dei dati dei soci
 		
 		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
-		if (!isset($_SESSION['User']) || ($_SESSION['User']) != "admin") {
+		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
 		//Se e' stato scelto di cancellare l'account selezionato viene eliminato
@@ -83,7 +83,7 @@
 				$data = date('d-m-Y', strtotime("$datanasc"));
 				echo '<tr><td>Data Nascita:</td><td>'.$data.'</td></tr>';
 				echo '<tr><td>Luogo Nascita:</td><td>'.$row['LuogoNasc'].'</td></tr>';
-				echo '<tr><td><form action="" method="get"><button name="moddati" value="'.$user.'">Modifica Dati Personali</button></form></td><td><form action="gutenti.php"><button >Torna Indietro</button></form></tr>';
+				echo '<tr><td><a href="moduser.php?moddati='.$user.'">Modifica Dati Personali</a></td><td><a href="gutenti.php">Torna Indietro</a></td></tr>';
 				
 				echo '<tr><td colspan="3" height="50"><form action="" method="post"><button name="reset" value="'.$row['CodFiscale'].'">Reset Password</button></form></td></tr>';
 				echo '<tr><td colspan="3" height="50"></td></tr><tr><td colspan="3" height="50"><form action="" method="post"><button name="cancella" value="'.$row['CodFiscale'].'">Cancella Account</button></form> Cancella tutte le informazioni dell\'utente</td></tr>';
@@ -120,8 +120,8 @@
 				$errore = false;
 				
 				$username = isset($_POST['username']) ? trim($_POST['username']) : '';
-				if ((! preg_match('/^[a-zA-Z]*$/', $username)) || $username == '') {
-				$msg = $msg."<b>Errore! Il nome puo' contenere solo lettere</b><br />";
+				if ((! preg_match('/^[a-zA-Z0-9]*$/', $username)) || $username == '') {
+				$msg = $msg."<b>Errore! Il nome puo' contenere solo lettere e numeri</b><br />";
 				$errore=TRUE;
 
 				};
