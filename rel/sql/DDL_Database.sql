@@ -1,13 +1,13 @@
 /*Se le tabelle esistono vengono eliminate*/
-DROP TABLE IF EXISTS PRENOTAZIONE;
-DROP TABLE IF EXISTS ISCRITTOCORSO;
-DROP TABLE IF EXISTS LEZIONE;
-DROP TABLE IF EXISTS CAMPO;
-DROP TABLE IF EXISTS CORSO;
-DROP TABLE IF EXISTS ACCOUNT;
-DROP TABLE IF EXISTS SOCIO;
-DROP TABLE IF EXISTS ISTRUTTORE;
 DROP TABLE IF EXISTS PERSONA;
+DROP TABLE IF EXISTS ISTRUTTORE;
+DROP TABLE IF EXISTS SOCIO;
+DROP TABLE IF EXISTS ACCOUNT;
+DROP TABLE IF EXISTS CORSO;
+DROP TABLE IF EXISTS CAMPO;
+DROP TABLE IF EXISTS LEZIONE;
+DROP TABLE IF EXISTS ISCRITTOCORSO;
+DROP TABLE IF EXISTS PRENOTAZIONE;
 
 CREATE TABLE PERSONA (
  CodFiscale char(16) NOT NULL,
@@ -183,7 +183,7 @@ BEGIN
 	WHERE PRENOTAZIONE.Data = d AND PRENOTAZIONE.Ora = h AND (PRENOTAZIONE.CodFiscale = cod || CORSO.CodFiscale = cod);
 	
 		IF presente > 0 THEN
-			RETURN CONCAT('Errore, hai gia una prenotazione nella data ',d,' alle ',h);
+			RETURN CONCAT('Errore, hai gia\' una prenotazione nella data ',d,' alle ',h);
 		ELSE
 			INSERT INTO PRENOTAZIONE (CodFiscale, CodCampo, Data, Ora) VALUES (cod, c, d, h);
 			RETURN 'Prenotazione aggiunta con successo';
@@ -209,7 +209,7 @@ BEGIN
 			SET num = 0;
 		END IF;
 		IF presente > 0 THEN
-			RETURN CONCAT('Errore, questo istruttore ha gia una prenotazione il ',d,' alle ',h);
+			RETURN CONCAT('Errore, questo istruttore ha gia\' una prenotazione il ',d,' alle ',h);
 		ELSE
 			SET num = num + 1;
 			INSERT INTO LEZIONE (CodCorso, CodLezione) VALUES (corso, num);
@@ -257,7 +257,7 @@ BEGIN
 	END IF;
 	
 	IF d > a THEN
-		RETURN 'Questo corso richiede un livello di abilita maggiore';
+		RETURN 'Questo corso richiede un livello di abilita\' maggiore';
 	ELSE
 		RETURN 'Iscriviti';
 	END IF;
