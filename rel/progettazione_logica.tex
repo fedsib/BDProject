@@ -36,7 +36,7 @@ Le chiavi primarie vengono indicate come \underline{sottolineate}, mentre le chi
 \item Tutti i campi tranne \textit{CodFiscale} sono NOT NULL. Vi possono essere corsi per il quale non v'è Istruttore.
 \item Il campo \textit{Attivo} che determina se un corso è attivo, oppure no, è impostato di default a zero.
 \end{itemize}
-\item \textsc{Campo}(\underline{\textbf{CodCampo}}: int, \textbf{TipoSup}: enum\{'Terra Rossa','Erba Sintetica','PlayIt'\})
+\item \textsc{Campo}(\underline{\textbf{CodCampo}}: tinyint, \textbf{TipoSup}: enum\{'Terra Rossa','Erba Sintetica','PlayIt'\})
 \begin{itemize}
 \item Tutti i campi sono NOT NULL.
 \end{itemize}
@@ -46,17 +46,23 @@ Le chiavi primarie vengono indicate come \underline{sottolineate}, mentre le chi
 \begin{itemize}
 \item Nuova tabella derivante dall'associazione \textit{IscrittoCorso}
 \end{itemize}
-\item \textsc{Prenotazione}(\textbf{CodCorso}*:int, \textbf{CodLezione}*: int, \textbf{CodFiscale}*: string, \underline{\textbf{CodCampo}*}: int, \underline{\textbf{Data}}: date, \underline{\textbf{Ora}}: tinyint)  
+\item \textsc{Prenotazione}(\textbf{CodCorso}*:int, \textbf{CodLezione}*: int, \textbf{CodFiscale}*: string, \underline{\textbf{CodCampo}*}: tinyint, \underline{\textbf{Data}}: date, \underline{\textbf{Ora}}: tinyint)  
 \begin{itemize}
 \item I campi \textit{CodCorso}, \textit{CodLezione}, \textit{CodFiscale} possono essere NULL ma non tutti e tre contemporaneamente.
 \end{itemize}
 \end{itemize}
 
 \section{Vincoli semantici non catturati dallo schema}
+\begin{itemize}
+\item Non e' possibile prenotare lo stesso campo, nella stessa data e ora.
+\item Non puo' esistere una lezione senza una relativa prenotazione.
+\item Ogni persona puo' avere al massimo 7 prenotazioni personali attive.
+\end{itemize}
+
 \section{Schema logico}
 \begin{figure}[H]
  \centering
-  \includegraphics[width=\textwidth, height=\textheight]{Images/LOGICO.jpg}
+  \includegraphics[width=\textwidth, height=\textheight]{images/LOGICO.jpg}
 \caption{Lo Schema Concettuale E-R Ristrutturato}
 \end{figure}
 \chapter{Implementazione dello schema logico tramite DDL di MySQL} 

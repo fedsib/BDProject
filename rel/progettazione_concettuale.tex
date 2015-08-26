@@ -49,7 +49,7 @@ Chiave primaria: \underline{CodCorso} \hfill
 Chiave primaria: \underline{(CodCorso,CodLezione)} \hfill 
 \item[CAMPO:] modella un campo da Tennis
 \begin{itemize}
-\item CodCampo: \textit{int} \hfill 
+\item CodCampo: \textit{tinyint} \hfill 
 \item TipoSup: \textit{enum\{‘Terra rossa’, ‘Erba sintetica’, ‘Playit’\}}
 \end{itemize}
 Chiave primaria: \underline{CodCampo} \hfill 
@@ -119,9 +119,15 @@ La generalizzazione è inoltre \textit{esclusiva}, in quanto una \textit{Persona
 Le due sottoclassi specializzate prevedono degli attributi propri per modellare gli istruttori (\textit{Qualifica}, \textit{Retribuzione} e \textit{DataAssunzione}) e i soci (\textit{DataIscrizione} e \textit{Livello}).
 
 \section{Vincoli di Integrità aggiuntivi}
+
+\begin{itemize}
+\item La retribuzione di un istruttore non puo' essere un valore negativo (minore od uguale a zero).
+\item La retribuzione di un istruttore non puo' essere inferiore alla retribuzione base, fissata ad 800 \euro .
+\end{itemize}
+
 \section{Schema concettuale E-R}
 \begin{figure}[H]
  \centering
-  \includegraphics[width=\textwidth, height=\textheight]{Images/ER_FINALE.jpg}
+  \includegraphics[width=\textwidth, height=\textheight]{images/ER_FINALE.jpg}
 \caption{Schema Concettuale E-R}
 \end{figure}

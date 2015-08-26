@@ -1,17 +1,17 @@
+/*INIZIO FUNCTION*/
 /* Controlla che un utente/amministratore non abbia altre prenotazioni al momento se non la trova la aggiunge altrimenti da errore.
 Viene usata nelle prenotazioni personali */
 
 DROP FUNCTION IF EXISTS ControlloPrenotazione;
 DELIMITER |
-
 CREATE FUNCTION ControlloPrenotazione(cod CHAR(16), d DATE, h int, c int) RETURNS CHAR(100)
 BEGIN	
 	DECLARE presente int;
-	SELECT COUNT(*) INTO presente FROM PRENOTAZIONE LEFT JOIN CORSO ON PRENOTAZIONE.CodCorso = CORSO.CodCorso 
-	WHERE PRENOTAZIONE.Data = d AND PRENOTAZIONE.Ora = h AND (PRENOTAZIONE.CodFiscale = cod || CORSO.CodFiscale = cod);
+	SELECT COUNT(*) INTO presente FROM PRENOTAZIONE LEFT JOIN CORSO ON PRENOTAZIONE.CodCorso = CORSO.CodCorso LEFT JOIN ISCRITTOCORSO ON PRENOTAZIONE.CodCorso = ISCRITTOCORSO.CodCorso
+	WHERE PRENOTAZIONE.Data = d AND PRENOTAZIONE.Ora = h AND (PRENOTAZIONE.CodFiscale = cod || CORSO.CodFiscale = cod || ISCRITTOCORSO.CodFiscale = cod);
 	
 		IF presente > 0 THEN
-			RETURN CONCAT('Errore, hai gia\' una prenotazione nella data ',d,' alle ',h);
+			RETURN CONCAT('Errore, hai gia una prenotazione nella data ',d,' alle ',h);
 		ELSE
 			INSERT INTO PRENOTAZIONE (CodFiscale, CodCampo, Data, Ora) VALUES (cod, c, d, h);
 			RETURN 'Prenotazione aggiunta con successo';
@@ -20,9 +20,7 @@ END;
 |
 DELIMITER ;
 
-
-/* Controlla che un utente/amministratore non abbia altre prenotazioni al momento 
-se non la trova la aggiunge altrimenti da errore. Viene usata nelle aggiunta delle lezioni*/
+/* Controlla che l'istruttore che tiene un corso non abbia gia' altre prenotazioni personali. Viene usata nelle aggiunta delle lezioni*/
 
 DROP FUNCTION IF EXISTS ControlloPrenotazioneCorso;
 DELIMITER |
@@ -37,7 +35,7 @@ BEGIN
 			SET num = 0;
 		END IF;
 		IF presente > 0 THEN
-			RETURN CONCAT('Errore, questo istruttore ha gia\' una prenotazione il ',d,' alle ',h);
+			RETURN CONCAT('Errore, questo istruttore ha gia una prenotazione il ',d,' alle ',h);
 		ELSE
 			SET num = num + 1;
 			INSERT INTO LEZIONE (CodCorso, CodLezione) VALUES (corso, num);
@@ -49,10 +47,9 @@ END;
 DELIMITER ;
 
 
-/* Estrae il livello del Corso in difficoltà, lo confronta cone le possibilità e gli da un valore numerico 1-2-3,
- fa la stessa cosa per il livello di abilita' del socio. Poi confronta difficolta > abilita e ritorna un emsssaggio, 
- se e' Iscriviti il php visualizza il bottone di iscrizione
-*/
+/* Estrae il livello del Corso in difficolta', lo confronta con i valori previsti e gli da un valore numerico 1-2-3,
+ fa la stessa cosa per il livello di abilita' del socio. Poi confronta difficolta > abilita e ritorna un messsaggio, 
+ se e' Iscriviti il php visualizza il bottone di iscrizione*/
 
 DROP FUNCTION IF EXISTS PossoIscrivermi;
 DELIMITER |
@@ -74,7 +71,7 @@ BEGIN
 	END IF;
 	
 	SET abilita = (SELECT SOCIO.Livello FROM SOCIO JOIN ACCOUNT ON SOCIO.CodFiscale = ACCOUNT.CodFiscale WHERE ACCOUNT.UserName = usr);
-	IF abilita = "Avanzato" THEN
+	IF abilita = "Esperto" THEN
 		SET a = 3;
 	ELSE
 		IF abilita = "Intermedio" THEN
@@ -85,11 +82,13 @@ BEGIN
 	END IF;
 	
 	IF d > a THEN
-		RETURN 'Questo corso richiede un livello di abilita\' maggiore';
+		RETURN 'Questo corso richiede un livello di abilita maggiore';
 	ELSE
 		RETURN 'Iscriviti';
 	END IF;
 END;
 |
 DELIMITER ;
+
+/*FINE FUNCTION*/
 

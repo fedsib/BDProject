@@ -1,48 +1,118 @@
 \chapter{Interfaccia Web} 
-
+ 
 \section{Descrizione interfaccia}
 
-\subsection{GUI}
+Per interagire con il database e' stata sviluppata un'interfaccia web.
+
+\subsection{Layout}
+Si e' optato per un classico layout cosi' strutturato:
+
+\begin{itemize}
+\item Spazio per titolo e logo del sito
+\item Una barra informativa che indica la posizione dell'utente all'interno del sito e alla destra un link alla pagina di login.
+\item Un menu' di navigazione laterale personalizzato in base ai permessi dell'utente che effettua il login.
+\item Un box centrale con il contenuto della pagina.
+\end{itemize}
+
 \subsection{CSS}
+
+Gli aspetti grafici basilari per il rendering delle pagine web vengono gestiti tramite CSS, particolare attenzione e' stata dedicata alla scelta dei colori per permettere una navigazione del sito anche a persone con problemi di vista.
+
+\subsection{Note}
+In alcune pagine sono stati utilizzati degli \textit{Hidden Fields} per il passaggio di dati tra pagine.
 
 \section{Descrizione delle pagine}
 
+\section{Funzioni}
+Il file \textit{phpfunctions.php} contiene le funzioni base utilizzate da tutte le altre pagine php.
+
+\subsection{connessione}
+Effettua la connessione al server.
+
+\subsection{chiusura}
+Chiude la connessione al server, quando necessario.
+
+\subsection{loginlink}
+Gestisce i link per il login della barra informativa orizzontale distinguendo se l'utente e' loggato o meno.
+
+\subsection{menu}
+
+Genera il menu' verticale laterale.
+
 \subsection{addadmin.php}
+
+Aggiunge un nuovo istruttore che avra' privegi amministrativi.
 
 \subsection{adduser.php}
 
+Aggiunge un nuovo utente con privilegi di default.
+
 \subsection{corsi.php}
+
+Pagina che usa un socio per visualizzare i corsi ai quali e' iscritto e accedere alle informazioni dei corsi.
 
 \subsection{gcorsi.php}
 
+Pagina che usa l'amminsitratore per visualizzare tutti i corsi, aggiungerne di nuovi e accedere alle informazioni dei corsi.
+
 \subsection{gestiscicorso.php}
+
+Visualizza tutte le informazioni del corso, dando accesso alle pagine per vedere gli iscritti, aggiungere le nuove prenotazioni ai campi per le lezioni del corso, modificare le informazioni del corso o cancellarlo. Solo lato admin.
 
 \subsection{gprenotazioni.php}
 
+Permette agli istruttori di vedere, fare ricerche e cancellare prenotazioni.
+
 \subsection{gutenti.php}
+
+Gestione degli utenti, permette agli istruttori di vedere e fare ricerche sugli utenti. Accedere ai dettagli degli utenti ed aggiungere un nuovo account utente o amministratore. 
 
 \subsection{index.php}
 
+La pagina principale del corso.
+
 \subsection{informazionicorso.php}
+
+Permette all'utente di visualizzare informazioni dettagliate di un corso (tra le quali anche le lezioni prenotate), iscriversi in base al suo livello e cancellare l'iscrizione ai corsi.
 
 \subsection{iscritticorso.php}
 
+Visualizza le persone iscritte ad un corso e permette agli istruttori la cancellazione delle loro iscrizioni.
+
 \subsection{login.php}
+
+Gestisce il login tramite sessioni.
 
 \subsection{logout.php}
 
+Effettua il logout, eliminando la sessione e rimandando all'index.
+
 \subsection{modadmin.php}
+
+Visualizza informazioni sugli istruttori e permette di modificarle agli istruttori.
 
 \subsection{modificacorso.php}
 
+Permette agli istruttori di modificare le informazioni dei corsi.
+
 \subsection{moduser.php}
+
+Permette agli istruttori di modificare le informazioni dei soci.
 
 \subsection{prenotalezione.php}
 
+Permette di prenotare un campo per una nuova lezione di un corso.
+
 \subsection{prenotazione.php}
+
+In base se l'utente e' socio oppure istruttore permette:
+\begin{itemize}
+\item A soci e istruttori di vedere le proprie prenotazioni e le prossime lezioni dei corsi.
+\item A soci e istruttori di effettuare e rimuovere prenotazioni personali. 
+\item Ai soci, vedere le prenotazioni ai corsi ai quali e' iscritto
+\item Agli istruttori, di vedere le prenotazioni ai campi delle prossime lezioni dei corsi tenuti.
+\end{itemize}
 
 \subsection{utenti.php}
 
-\section{Funzioni.php}
-
-\subsection{ControlloPrenotazione.php}
+Permette di vedere e modificare le proprie informazioni (tranne la data di assunzione/iscrizione) e cancellare l'account.
