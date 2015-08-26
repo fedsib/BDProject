@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	require "./cgi-bin/phpfunctions.php" 
+	require "../cgi-bin/phpfunctions.php" 
 	
 ?>
 
@@ -10,7 +10,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
-	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
+	<link type="text/css" rel="stylesheet" href="../style/screen-style.css" media="screen" />
 </head>
 <body>
 	<div id="header"> 
@@ -150,7 +150,7 @@
 			<td align="right">Livello</td>
 			<td colspan="2"><select name="Livello"><option value="Principiante">Principiante</option>';
 			if ($livello == "Intermedio") { echo '<option value="Intermedio" selected>Intermedio</option>'; } else { echo '<option value="Intermedio">Intermedio</option>'; }
-			if ($livello == "Avanzato") { echo '<option value="Avanzato" selected>Avanzato</option>'; } else { echo '<option value="Avanzato">Avanzato</option>'; }
+			if ($livello == "Esperto") { echo '<option value="Esperto" selected>Esperto</option>'; } else { echo '<option value="Esperto">Esperto</option>'; }
 			echo '</tr>
 			<tr>
 			<td colspan="2"><button name="aggiungi" type="submit" value="aggiungi">Aggiungi Utente</button></form></td><td><form action="gutenti.php"><button >Annulla</button></form></td>

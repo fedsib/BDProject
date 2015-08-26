@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	require "./cgi-bin/phpfunctions.php" 
+	require "../cgi-bin/phpfunctions.php" 
 	
 ?>
 
@@ -10,7 +10,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
-	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
+	<link type="text/css" rel="stylesheet" href="../style/screen-style.css" media="screen" />
 </head>
 <body>
 	<div id="header"> 
@@ -52,7 +52,7 @@
 			$sql = "DELETE FROM PERSONA WHERE CodFiscale ='$codice'";
 			$conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 			if ($conn->affected_rows > 0) {
-				echo '<tr><td><p>Account eliminato con successo. <a href="index.php">Torna Indietro</a></p></td></tr>';
+				echo '<tr><td><p>Account eliminato con successo. <a href="../index.php">Torna Indietro</a></p></td></tr>';
 				session_destroy(); //Effettuo il logout se elimino l'account attuale
 			} else {
 				echo '<tr><td><p>Errore, utente non trovato. <a href="utenti.php">Torna Indietro</a></p></td></tr>';

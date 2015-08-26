@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	require "./cgi-bin/phpfunctions.php" 
+	require "../cgi-bin/phpfunctions.php" 
 	
 ?>
 
@@ -10,7 +10,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
-	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
+	<link type="text/css" rel="stylesheet" href="../style/screen-style.css" media="screen" />
 </head>
 <body>
 	<div id="header"> 
@@ -106,6 +106,8 @@
 			echo '<table width="40%" border="0" align="center" cellpadding="10" cellspacing="10" style="float:right"><tr>
 			<td align="center"><br /><a href="adduser.php">Aggiungi Utente</a><br /></td></tr><tr>
 			<td align="center"><a href="addadmin.php">Aggiungi Amministratore</a></td></tr></table>';
+			
+			$link = "gutenti.php?nome=".$nome."&cognome=".$cognome."&codfiscale=".$codfiscale."&tipo=".$tipo."&cerca=Cerca";
 			//Mostro la tabella di ricerca degli utenti
 			echo '<table width="60%" border="0" align="center" cellpadding="10" cellspacing="5" style="float:left"><tr><th colspan="2">Ricerca</th></tr><form  name="cerca" action="" method="get">';
 			echo '<tr><td>Nome:</td><td><input name="nome" type="text" value="'.$nome.'"></input></td></tr>';
@@ -136,11 +138,11 @@
 			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 			
 			if ($result->num_rows > 0) {
-				echo '<table border="0" align="center" cellpadding="5" cellspacing="5" class="Table" width ="100%">';
+				echo '<table border="1" align="center" cellpadding="10" cellspacing="2" width ="100%">';
 				echo '<tr><th  width="40%">Cognome/Nome</th><th width ="15%">Tipo</th><th width="30%">Username</th><th width="15%">Modifica</th></tr>';
 				while($row = $result->fetch_assoc()) {
 					echo '<tr>';
-					echo '<td>'.$row['Cognome'].' '.$row['Nome'].'</td>';
+					echo '<td height="25px">'.$row['Cognome'].' '.$row['Nome'].'</td>';
 					$admin = $row['Admin'];
 					if ($admin) { echo '<td>Admin</td>';} else { echo '<td>User</td>'; }
 					
@@ -156,14 +158,16 @@
 				echo '</table>';
 			}
 			
-			if ($numrighe > 15) {
+			
 				//Se ci sono piu' risultati dei 15 mostrati aggiungo i link per vedere gli altri
 				echo '<p align="center"><br /><br />';
 				if ((isset($_GET['action'])) && ((is_int($inizio/15)) && (($inizio/15) >0 ))) { echo '<a href="'.$link.'&action='.($inizio-15).'">Indietro</a>'; }
-				echo "   -   ";
+				$x = (($inizio+15) / 15);
+				$y = floor(($numrighe+15)/15);
+				echo "   - Pagina $x di $y -   ";
 				if (($numrighe-$inizio) > 15 ) { echo '<a href="'.$link.'&action='.($inizio+15).'">Avanti</a>'; }
 				echo '</p>';
-			}
+			
 			
 			} else  {
 				

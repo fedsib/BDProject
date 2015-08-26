@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	require "./cgi-bin/phpfunctions.php" 
+	require "../cgi-bin/phpfunctions.php" 
 	
 ?>
 
@@ -10,7 +10,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
-	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
+	<link type="text/css" rel="stylesheet" href="../style/screen-style.css" media="screen" />
 </head>
 <body>
 	<div id="header"> 
@@ -70,7 +70,7 @@
 			if ($Pass == $Hash) {
 				if ($admin) { $_SESSION['Tipo'] = "Admin"; } else { $_SESSION['Tipo'] = "User"; };
 				$_SESSION['User']=$User;
-				header("location:index.php");
+				header("location:../index.php");
 				exit;
 			} else {
 				$msg = "<b>Password Sbagliata</b><br />";

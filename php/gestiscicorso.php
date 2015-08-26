@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	require "./cgi-bin/phpfunctions.php" 
+	require "../cgi-bin/phpfunctions.php" 
 	
 ?>
 
@@ -10,7 +10,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
-	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
+	<link type="text/css" rel="stylesheet" href="../style/screen-style.css" media="screen" />
 </head>
 <body>
 	<div id="header"> 
@@ -40,7 +40,7 @@
 		//Pagina per la gestione di un corso
 		
 		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
-		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
+		if (!isset($_SESSION['User']) || (($_SESSION['Tipo'] != "Admin"))) {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
 		
@@ -62,7 +62,7 @@
 		} elseif ((isset($_GET['action'])) && isset($_POST['cancpren']) ) {
 			
 			$codcorso = $_GET['action'];
-			$codlezione = $_POST['codlezione'];
+			$codlezione = $_POST['cancpren'];
 			$conn = connessione();
 			$sql = "DELETE FROM LEZIONE WHERE LEZIONE.CodLezione = '".$codlezione."' AND LEZIONE.CodCorso = '".$codcorso."'";
 			$conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
@@ -93,14 +93,18 @@
 				if ($attivo == 1) { echo 'Attivo</td>'; } else { echo 'Non Attivo</td>'; }
 			}
 			echo '</tr></table>';
-			$sql = "SELECT PRENOTAZIONE.CodLezione, PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo FROM PRENOTAZIONE WHERE PRENOTAZIONE.CodCorso ='".$codcorso."'  ORDER BY - PRENOTAZIONE.Data DESC, - PRENOTAZIONE.Ora DESC";
+			$sql = "SELECT PRENOTAZIONE.CodLezione, PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo FROM PRENOTAZIONE WHERE PRENOTAZIONE.CodCorso ='".$codcorso."'  ORDER BY PRENOTAZIONE.Data, PRENOTAZIONE.Ora";
 			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 			if ($result->num_rows > 0) {
 				echo '<br /><br /><br /><br /><table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2"><tr><th width="25%" heigth="50px">Lez.N.</th><th width="25%">Campo N.</th><th width="25%">Data</th><th width="25%">Ora</th><th></th></tr>';
 				$numlezione = 1;
 				while($row = $result->fetch_assoc()) {
 				if ($row['CodCampo'] != NULL) {
-					echo '<tr><td>'.$numlezione.'</td><td>'.$row['CodCampo'].'</td><td>'.$row['Data'].'</td><td>'.$row['Ora'].'</td><td>';
+					$data = date('d-m-Y', strtotime($row['Data']));
+					echo '<tr><td>'.$numlezione.'</td><td>'.$row['CodCampo'].'</td><td>'.$data.'</td><td>'.$row['Ora'].'</td><td>
+					<form action="gestiscicorso.php?action='.$codcorso.'" method="POST">
+					<button type="submit" name="cancpren" value="'.$row['CodLezione'].'" >Cancella</button></form></tr>
+					</td></tr>';
 				$numlezione++;
 				}
 			}

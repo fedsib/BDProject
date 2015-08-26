@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	require "./cgi-bin/phpfunctions.php" 
+	require "../cgi-bin/phpfunctions.php" 
 	
 ?>
 
@@ -10,7 +10,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
-	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
+	<link type="text/css" rel="stylesheet" href="../style/screen-style.css" media="screen" />
 </head>
 <body>
 	<div id="header"> 
@@ -46,7 +46,8 @@
 			
 		//Se si sceglie di cancellare una delle proprio prenotazioni la elimino dal DB
 		} elseif (isset($_POST['Cancella'])) {
-		$data = $_POST['data'];
+		$datatemp = $_POST['data'];
+		$data = date('Y-m-d', strtotime($datatemp));
 		$ora = $_POST['ora'];
 		$campo = $_POST['campo'];
 		
@@ -73,7 +74,7 @@
 				$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 				if ($result->num_rows > 0) {
 				while($row = $result->fetch_row()) {
-				echo $row[0];
+				echo $row[0].' <a href="prenotazione.php">Torna Indietro</a>';
 				}
 				};
 				
@@ -100,7 +101,7 @@
 			for ($x = 1; $x <= $numrighe; $x++) {
 				$datacal = date('Y-m-d', strtotime("$dataoggi +1 day"));
 				echo '<tr><th colspan="7" style="height: 30px;">Prenotazioni per il campo n.'.($x).' in '. $tipocampi[$x-1].' nel giorno</th></tr><tr>';
-				for ($y = 1; $y <= 7; $y++) {
+				for ($y = 1; $y <= 16; $y++) {
 					$nodisp = true;
 					echo '<td style="height: 20px; padding-bottom:30px;">'.date('d-m-Y', strtotime("$datacal")).'<br />
 					<form action="" method="post">
@@ -155,8 +156,9 @@
 			<tr><td width="25%">Data</td><td width="25%">Ora</td><td width="25%">Campo</td><td width="25%"> </td></tr>';
 		while($row = $result->fetch_array()) {
 			echo '<tr><form action="" method="post">
-			<td width="25%">
-			<input  type="text" name="data" value="'.$row['Data'].'" readonly="readonly"></input></td><td width="25%">
+			<td width="25%">';
+			$datapren = date('d-m-Y', strtotime($row['Data']));
+			echo '<input  type="text" name="data" value="'.$datapren.'" readonly="readonly"></input></td><td width="25%">
 			<input  type="text" name="ora" value="'.$row['Ora'].'" readonly="readonly"></input></td><td width="25%">
 			<input  type="text" name="campo" value="'.$row['CodCampo'].'" readonly="readonly"></input></td><td width="25%">';
 			if ($row['Data'] == $dataoggi) { 
@@ -188,8 +190,10 @@
 		$datamax = date('Y-m-d', strtotime("$dataoggi +16 day"));
 		//Estraggo le prenotazioni relative ai corsi che si seguono o si tengono
 		$sql = "SELECT PRENOTAZIONE.CodCampo, PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCorso
-				FROM PRENOTAZIONE LEFT JOIN CORSO ON PRENOTAZIONE.CodCorso = CORSO.CodCorso LEFT JOIN ISCRITTOCORSO ON CORSO.CodCorso = ISCRITTOCORSO.CodCorso  JOIN ACCOUNT ON (ACCOUNT.CodFiscale = CORSO.CodFiscale OR ACCOUNT.CodFiscale = ISCRITTOCORSO.CodFiscale)
-				WHERE ACCOUNT.UserName = '".$_SESSION['User']."' AND PRENOTAZIONE.Data >= '$dataoggi' AND PRENOTAZIONE.Data <= '$datamax' ORDER BY PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo";
+				FROM PRENOTAZIONE LEFT JOIN CORSO ON PRENOTAZIONE.CodCorso = CORSO.CodCorso ";
+			if  ($_SESSION['Tipo'] == "Admin") { $sql= $sql.'JOIN ACCOUNT ON ACCOUNT.CodFiscale = CORSO.CodFiscale ';} else 
+				{  $sql = $sql.' LEFT JOIN ISCRITTOCORSO ON CORSO.CodCorso = ISCRITTOCORSO.CodCorso  JOIN ACCOUNT ON ACCOUNT.CodFiscale = ISCRITTOCORSO.CodFiscale ';}
+		$sql= $sql."WHERE ACCOUNT.UserName = '".$_SESSION['User']."' AND PRENOTAZIONE.Data >= '$dataoggi' AND PRENOTAZIONE.Data <= '$datamax' ORDER BY PRENOTAZIONE.Data, PRENOTAZIONE.Ora, PRENOTAZIONE.CodCampo";
 		$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 		$numrighe = $result->num_rows;
 		echo "<table>";
@@ -198,8 +202,9 @@
 			<tr><th colspan="4">Prossime lezioni dei Corsi (fino a 15 giorni)</th></tr>
 			<tr><td width="25%">Data</td><td width="25%">Ora</td><td width="25%">Campo</td><td width="25%"> </td></tr>';
 		while($row = $result->fetch_array()) {
-			echo '<tr><td width="25%">'.$row['Data'].'</td><td width="25%">'.$row['Ora'].'</td><td width="25%">'.$row['CodCampo'].'</td><td width="25%">';
-			if ($_SESSION['Tipo'] = "Admin") { 
+			$datapren = date('d-m-Y', strtotime($row['Data']));
+			echo '<tr><td width="25%">'.$datapren.'</td><td width="25%">'.$row['Ora'].'</td><td width="25%">'.$row['CodCampo'].'</td><td width="25%">';
+			if ($_SESSION['Tipo'] == "Admin") { 
 				echo '<a href="gestiscicorso.php?action='.$row['CodCorso'].'">Vedi Informazioni Corso</a>';
 			} else {
 				echo '<a href="informazionicorso.php?action='.$row['CodCorso'].'">Vedi Informazioni Corso</a>';

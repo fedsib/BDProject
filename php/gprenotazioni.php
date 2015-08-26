@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	require "./cgi-bin/phpfunctions.php" 
+	require "../cgi-bin/phpfunctions.php" 
 	
 ?>
 
@@ -10,7 +10,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
 	<title>Progetto Basi di Dati</title>
 	<meta name="language" content="italian it" />
-	<link type="text/css" rel="stylesheet" href="./style/screen-style.css" media="screen" />
+	<link type="text/css" rel="stylesheet" href="../style/screen-style.css" media="screen" />
 </head>
 <body>
 	<div id="header"> 
@@ -198,7 +198,7 @@
 				echo '<table border="1" align="center" cellpadding="5" cellspacing="2" class="Table" width ="100%">';
 				echo '<tr><th  width="30%">Cognome/Nome</th><th width ="10%">Corso</th><th width="30%">Account/NomeCorso</th><th width="5%">Campo</th><th width="10%">Data</th><th width ="15%">Cancella</th></tr>';
 				while($row = $result->fetch_assoc()) {
-					echo '<tr>';
+					echo '<tr heigth="25px">';
 					echo '<td>'.$row['Cognome'].' '.$row['Nome'].'</td>';
 					if ($row['NomeCorso']) { echo '<td>Corso</td>';} else { echo '<td>Privata</td>'; }
 					if ($row['NomeCorso']) { echo '<td>'.$row['NomeCorso'].'</td>';} else { echo '<td>'.$row['UserName'].'</td>'; }
@@ -237,7 +237,9 @@
 				echo '<p align="center"><br /><br />';
 				//Se ci sono più risultati di quelli mostrati genero dei link a fine pagina che vanno avanti o indietro nei risultati di 15 alla volta
 				if ((isset($_GET['action'])) && ((is_int($inizio/15)) && (($inizio/15) >0 ))) { echo '<a href="'.$link.'&action='.($inizio-15).'">Indietro</a>'; }
-				echo "   -   ";
+				$x = (($inizio+15) / 15);
+				$y = floor(($numrighe+15)/15);
+				echo "   - Pagina $x di $y -   ";
 				if (($numrighe-$inizio) > 15 ) { echo '<a href="'.$link.'&action='.($inizio+15).'">Avanti</a>'; }
 				echo '<br /><br /></p>';
 			}
