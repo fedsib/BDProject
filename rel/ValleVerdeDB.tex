@@ -7,8 +7,8 @@
 \usepackage{hyperref}
 \usepackage{titlesec}
 \usepackage{amssymb,amsmath}
-\usepackage[titles]{tocloft}
 \usepackage{appendix}
+
 \hypersetup{%
     pdfborder = {0 0 0}
 }
@@ -16,9 +16,11 @@
 \usepackage[svgnames]{xcolor} % Required to specify font color
 \usepackage{eurosym}
 
-\usepackage{titlesec}
+
 \titleformat{\chapter}[hang] 
 {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter.}{1em}{} 
+
+\titlespacing*{\chapter}{0pt}{5pt}{40pt}
 
 \newcommand*{\plogo}{\fbox{$\mathcal{PL}$}} % Generic publisher logo
 \usepackage{listings}
