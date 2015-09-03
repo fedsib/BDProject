@@ -84,7 +84,7 @@
 			} else {
 				echo $msg;
 			}
-			//Se seleziona crea nuovo corso, mostro il form per inserire i dati
+			//Se seleziona crea nuovo corso mostro il form per inserire i dati
 		} elseif ((isset($_GET['action'])) && ($_GET['action'] == "nuovo")) {
 			
 			
@@ -111,7 +111,7 @@
 			
 			$conn = connessione();
 		$sql = "SELECT CORSO.CodCorso, CORSO.NomeCorso, CORSO.TipoCorso, CORSO.Attivo, PERSONA.Nome, PERSONA.Cognome
-				FROM CORSO LEFT JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale";
+		FROM CORSO LEFT JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale";
 		
 		$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 		if ($result->num_rows > 0) {
@@ -133,7 +133,12 @@
 		echo '<br /><br /><a href="gcorsi.php?action=nuovo">Aggiungi nuovo corso</a>';
 			
 		}
-
+		
+	
+		
+		
+		
+		
 		?>
 		
 		

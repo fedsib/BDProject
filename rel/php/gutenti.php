@@ -37,9 +37,9 @@
 	
 	
 		<?php
-		/*Pagina per la gestione degli utenti
+		//Pagina per la gestione degli utenti
 		
-		Controllo che l'utente abbia fatto il login, se sì, controllo la variabile Tipo per controllare se ha i diritti di Amministratore*/
+		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
 		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
@@ -49,7 +49,7 @@
 			if (isset($_GET['action']) && is_int(($_GET['action'])/15)) { $inizio=$_GET['action']; } else {$inizio = 0;}
 			$msg = "";
 			$errore = FALSE;
-			$sqlwhere = ' WHERE 1 '; //Inizializzo la stringa che mi serve per aggiungere i campi di ricerca alla query
+			$sqlwhere = ' WHERE 1 '; //Inizializzo la stringa che mi serve per aggiungere i acmpi di ricerca alla query
 			
 			//Controllo se ci sono dei dati di ricerca inseriti, se ci sono e sono validi li aggiungo alla query
 			if (isset($_GET['nome']) && ((trim($_GET['nome'])) != '')) {

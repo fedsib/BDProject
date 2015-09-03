@@ -44,7 +44,7 @@
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
 		
-		//Se e' stato scelto di cancellare il corso prendo il codice del corso e lo rimuovo
+		//Se e' stato scelto di cancellare il corso prenso il codice del corso e lo rimuovo
 		} elseif ((isset($_GET['action'])) && isset($_POST['cancella']) ) {
 			
 			$codcorso = $_GET['action'];
@@ -58,8 +58,7 @@
 				echo "<p>Errore durante l'eliminazione, il corso selezionato potrebbe non esistere";
 			}
 		
-		/*Se e' stato scelto di cancellare la prenotazione di una lezione del corso recupero il codice del corso e della lezione
-		ed elimino la prenotazione corrispondente*/
+		//Se e' stato scelto di cancellare la prenotazione di una lezione del corso recupero il codice del corso e della lezioni e elimino la prenotazione corrispondente
 		} elseif ((isset($_GET['action'])) && isset($_POST['cancpren']) ) {
 			
 			$codcorso = $_GET['action'];

@@ -37,14 +37,13 @@
 	
 	
 		<?php
-		/*Pagina per la gestione degli utenti iscritti ad un corso
+		//Pagina per la gestione degli utenti iscritti ad un corso
 		
-		Controllo che sia stato effettuato il login e che sia un amministratore*/
+		//Controllo che sia stato effettuato il login e che sia un amministratore
 		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
-		/*Se e' stato fatto il login ed e' stato inviato il form per aggiungere una lezione recupero 
-		il codice del corso, data e ora della lezione e campo e aggiungo la lezione*/
+		//Se e' stato fatto il login ed e' stato inviato il form per cancellare un utente recupero il codice del corso e dell'utente e lo elimino dalla tabella degli iscritti
 		} elseif (isset($_POST['aggiungi'])) {
 		
 		$conn = connessione();
@@ -75,8 +74,7 @@
 			
 		
 		} else {
-			/*Mostro un form per l'aggiunta delle prenotazioni delle lezioni, prima faccio scegliere il campo ed il giorno poi controllo le ore
-			e mostro quali sono libere*/
+			//Mostro un form per l'aggiunta delle prenotazioni delle lezioni, prima faccio scegliere il campo ed il giorno poi controllo le ore e mostro quali sono libere
 			$corso = $_GET['action'];
 			
 			$conn = connessione();

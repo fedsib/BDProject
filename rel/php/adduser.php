@@ -23,7 +23,7 @@
 			loginlink();
 		?>
 	</p>
-	<p>Ti trovi in: Gestione Utenti -> Aggiungi Istruttore</p>
+	<p>Ti trovi in: Gestione Utenti -> Aggiungi Utente</p>
 	</div>
 
     <div id="nav"> 
@@ -34,16 +34,18 @@
 
 	<div id="content"> 
 
+	
+	
 		<?php
-		//Pagina per l'aggiunta di un Istruttore
+		//Pagina per l'aggiunta di un utente
 		
-		//Controllo che l'utente abbia fatto il login, se sì, controllo la variabile Tipo per controllare se ha i diritti di Amministratore
+		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
 		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
 			
 		}  else {
-				//Recupero le variabili se è stato inviato il form, se non sono settate le imposto a stringa vuota
+				//Recupero le variabili se è stato inviato il form, se non sono settato le imposto a stringa vuota
 				$nome = isset($_POST['Nome']) ? trim($_POST['Nome']) : '';
 				$cognome = isset($_POST['Cognome']) ? trim($_POST['Cognome']) : '';
 				$codfiscale = isset($_POST['CodFiscale']) ? trim($_POST['CodFiscale']) : '';
@@ -52,16 +54,13 @@
 				$telefono = isset($_POST['Telefono']) ? $_POST['Telefono'] : '';
 				$mail = isset($_POST['Mail']) ? trim($_POST['Mail']) : '';
 				$sesso = isset($_POST['Sesso']) ? trim($_POST['Sesso']) : '';
-				$qualifica = isset($_POST['Qualifica']) ? trim($_POST['Qualifica']) : '';
-				$retribuzione = isset($_POST['Retribuzione']) ? trim($_POST['Retribuzione']) : '';
+				$livello = isset($_POST['Livello']) ? trim($_POST['Livello']) : '';
 				$errore = true; //Setto true così da mostrare il form comunque in caso non siano stati inviati dati
 				$msg = "";
 
-			if  (isset($_POST['aggiungi'])) {
+			if  (isset($_POST['aggiungi'])) {	
 				//Controllo tutti i campi immessi se trovo errori setto errore a true e aggiungo il messaggio di errore a $msg
-				$errore = false; //Setto false così da non mostrare il form se i dati sono tutti corretti, se c'e'
-								 //un errore viene rimessa a true e mostra il form con gli errori
-				
+				$errore = false; //Setto false così da non mostrare il form se i dati sono tutti corretti, se c'e' un errore viene rimessa a true e mostra il form con gli errori
 				
 				if ((! preg_match('/^[a-zA-Z]*$/', $nome)) || $nome == '') {
 				$msg = $msg."<b>Errore! Il nome puo' contenere solo lettere</b><br />";
@@ -85,7 +84,7 @@
 				} else {
 				$sqldata = date('Y-m-d', strtotime("$datanasc"));
 				}
-				
+
 				if ((! preg_match('/^[a-zA-Z ]*$/', $luogonasc)) || $luogonasc == '') {
 				$msg = $msg."<b>Errore! Il luogo di nascita puo' contenere solo lettere e spazi</b><br />";
 				$errore=TRUE;
@@ -101,27 +100,16 @@
 					$errore=TRUE;
 				}
 				
-				
-				if ((! preg_match('/^[0-9]*$/', $retribuzione)) || $retribuzione == '') {
-				$msg = $msg."<b>Errore! Retribuzione puo' contenere solo numeri</b><br />";
-				$errore=TRUE;
-				};
-				
-				if (! preg_match('/^[a-zA-Z0-9 ]*$/', $qualifica)) {
-				$msg = $msg."<b>Errore! La qualifica puo' contenere solo lettere, numeri e spazi.</b><br />";
-				$errore=TRUE;
 
-				};
 				
 			}
-				
 				//Controllo se devo mostrare il form o meno
 			if ($errore) {
 			
-			echo '<form action="" method="post" name="Form Aggiunta Amministratore">
+			echo '<form action="" method="post" name="Form Modifica Dati Personali">
 			<table width="600" border="0" align="center" cellpadding="5" cellspacing="5" class="Table">
 			<tr>
-			<td colspan="3" align="left" valign="top"><h3>Inserisci Dati Personali Amministratore</h3></td>
+			<td colspan="3" align="left" valign="top"><h3>Inserisci Dati Personali Utente</h3></td>
 			</tr
 			<tr>
 			<td align="right">Nome *</td>
@@ -159,47 +147,45 @@
 			echo '</select></td>
 			</tr>
 			<tr>
-			<td align="right">Qualifica</td>
-			<td colspan="2"><input name="Qualifica" type="text" class="Input" value="'; if(isset($qualifica)){ echo "$qualifica"; } echo'"></td></tr>
+			<td align="right">Livello</td>
+			<td colspan="2"><select name="Livello"><option value="Principiante">Principiante</option>';
+			if ($livello == "Intermedio") { echo '<option value="Intermedio" selected>Intermedio</option>'; } else { echo '<option value="Intermedio">Intermedio</option>'; }
+			if ($livello == "Esperto") { echo '<option value="Esperto" selected>Esperto</option>'; } else { echo '<option value="Esperto">Esperto</option>'; }
+			echo '</tr>
 			<tr>
-			<td align="right">Retribuzione *</td>
-			<td colspan="2"><input name="Retribuzione" type="text" class="Input" value="'; if(isset($retribuzione)){ echo "$retribuzione"; } echo'"></td></tr>
-			<tr>
-			<td colspan="2"><button name="aggiungi" type="submit" value="aggiungi">Aggiungi Utente</button></form></td><td><form action="gutenti.php"><button type="submit">Annulla</button></form></td>
+			<td colspan="2"><button name="aggiungi" type="submit" value="aggiungi">Aggiungi Utente</button></form></td><td><form action="gutenti.php"><button >Annulla</button></form></td>
 			</tr>
 			<tr><td colspan="3">*Questi campi non possono essere vuoti</td></tr>
 			<tr><td colspan="3">'.$msg.'</td></tr>
 			</table>
 			';
 			} else {
-				/*Se ci sono i dati e sono corretti invece del form proseguo con l'inserimento dei dati
-				Venendo generato da un admin imposto come default di nomeutente/password il codice fiscale 
-				che sono poi modificabili dai singoli account*/
+				//Se ci sono i dati e sono corretti invece del form proseguo con l'inserimento dei dati
+				//Venendo generato da un admin imposto come default di nomeutente/password il codice fiscale che sono poi modificabili dai singoli account
+				$pass1 = substr($nome, 0, 3);
+				$pass2 = substr($cognome, 0, 3);
 				$user = $codfiscale;
+				$pass = $pass1.$pass2;
 				$pass = SHA1($user);
 				
 				//Eseguo la connessione e preparo le query da fare
 				$conn = connessione();
 				$conn->autocommit(0);
 				$sql = "INSERT INTO PERSONA (Nome, Cognome, CodFiscale, DataNasc, LuogoNasc, ";
-				if ($telefono != '') { $sql = $sql."Telefono," ;} 
+				if ($telefono != '') { $sql = $sql. "Telefono,";} 
 				$sql = $sql. "Mail, Sesso) VALUES ('$nome','$cognome','$codfiscale','$sqldata','$luogonasc',";
 				if ($telefono != '') { $sql = $sql. "'$telefono',";}
 				$sql = $sql. "'$mail', '$sesso')";
 				$data = date('Y-m-d');
-				$sql1 = "INSERT INTO ISTRUTTORE (CodFiscale, DataAssunzione, ";
-				if ($qualifica != '') { $sql1 = $sql1. "Qualifica,"; } 
-				$sql1 = $sql1. " Retribuzione) VALUES ('$codfiscale','$data',";
-				if ($qualifica != '') { $sql1 = $sql1. "'$qualifica',"; } 
-				$sql1 = $sql1. "'$retribuzione')";
-				$sql2 = "INSERT INTO ACCOUNT (CodFiscale, UserName, Admin, Hash) VALUES ('$codfiscale','$user','1','$pass')";
+				$sql1 = "INSERT INTO SOCIO (CodFiscale, DataIscrizione, Livello) VALUES ('$codfiscale','$data','$livello')";
+				$sql2 = "INSERT INTO ACCOUNT (CodFiscale, UserName, Admin, Hash) VALUES ('$codfiscale','$user','0','$pass')";
 				try {
 				//Eseguo le tre query se ci sono problemi interrompo e non applico le modifiche
 				$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 				if (!$result) { throw new Exception("Errore nell'inserimento non effettuo le operazioni."); }
-				$result = $conn->query($sql1) or die("Errore nella query MySQL: ".$conn->error);
+				$result = $conn->query($sql1) or die("Errore nella query MySQL");
 				if (!$result) { throw new Exception("Errore nell'inserimento non effettuo le operazioni."); }
-				$result = $conn->query($sql2) or die("Errore nella query MySQL: ".$conn->error);
+				$result = $conn->query($sql2) or die("Errore nella query MySQL");
 				if (!$result) { throw new Exception("Errore nell'inserimento non effettuo le operazioni."); }
 				
 				//Se non ci sono problemi applico le modifiche sul DB
@@ -213,14 +199,13 @@
 				
 				} catch (Exception $e) {
 
-				$conn->rollback();
-				echo $e->getMessage();
+			$conn->rollback();
+			echo $e->getMessage();
 			} 
 				
 			}
 			
 		}
-		
 		?>
 		
 		

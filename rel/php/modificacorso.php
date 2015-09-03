@@ -37,9 +37,9 @@
 	
 	
 		<?php
-		/*Pagina per la modifica dei dati di un corso
+		//Pagina per la modifica dei dati di un corso
 		
-		Controllo che l'utente abbia fatto il login, se sì, controllo la variabile Tipo per controllare se ha i diritti di Amministratore*/
+		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
 		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';

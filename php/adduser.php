@@ -37,9 +37,10 @@
 	
 	
 		<?php
-		//Pagina per l'aggiunta di un utente
+		/*Pagina per l'aggiunta di un utente
 		
-		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
+		Controllo che l'utente abbia fatto il login, se sì
+		controllo la variabile Tipo per controllare se ha i diritti di Amministratore*/
 		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
@@ -60,7 +61,8 @@
 
 			if  (isset($_POST['aggiungi'])) {	
 				//Controllo tutti i campi immessi se trovo errori setto errore a true e aggiungo il messaggio di errore a $msg
-				$errore = false; //Setto false così da non mostrare il form se i dati sono tutti corretti, se c'e' un errore viene rimessa a true e mostra il form con gli errori
+				$errore = false; //Setto false così da non mostrare il form se i dati sono tutti corretti, se c'e' un errore viene 
+								 //rimessa a true e mostra il form con gli errori
 				
 				if ((! preg_match('/^[a-zA-Z]*$/', $nome)) || $nome == '') {
 				$msg = $msg."<b>Errore! Il nome puo' contenere solo lettere</b><br />";
@@ -99,9 +101,7 @@
 					$msg = $msg."<b>Errore! La mail contiene caratteri non ammessi</b><br />";
 					$errore=TRUE;
 				}
-				
 
-				
 			}
 				//Controllo se devo mostrare il form o meno
 			if ($errore) {
@@ -160,8 +160,9 @@
 			</table>
 			';
 			} else {
-				//Se ci sono i dati e sono corretti invece del form proseguo con l'inserimento dei dati
-				//Venendo generato da un admin imposto come default di nomeutente/password il codice fiscale che sono poi modificabili dai singoli account
+				/*Se ci sono i dati e sono corretti invece del form proseguo con l'inserimento dei dati
+				Venendo generato da un admin imposto come default di nomeutente/password 
+				il codice fiscale che sono poi modificabili dai singoli account*/
 				$pass1 = substr($nome, 0, 3);
 				$pass2 = substr($cognome, 0, 3);
 				$user = $codfiscale;

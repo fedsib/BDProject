@@ -1,0 +1,143 @@
+/* Regole Generali*/
+
+* {
+margin:0px;
+padding:0px;
+}
+
+html {
+    color: #000;
+    background: #f7f7f7;
+}
+
+body{
+	font-size:80%;
+	font-family: Verdana, Geneva, sans-serif;
+	max-width:1024px;
+	margin:auto;
+}
+
+ul{
+list-style: none;
+}
+
+input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+/* Fine Regole Generali */
+
+
+/* Layout Principale */
+
+/* Header */
+#header {  
+	margin:0 auto;
+	width:94%;
+	min-width:40em;
+	max-width:70em;
+	height:140px;
+	background-image:url("../img/logo.png");
+	background-repeat:no-repeat;
+}
+
+/* Fine Header */
+
+/* Barra Superiore */
+
+
+#login{
+float:right;
+height:1.5em;
+margin-bottom:0.3em;
+margin-right:0.5em
+}
+
+#barrasup{
+width:100%;
+height:1.5em;
+background-color:#abcdef;
+padding-top: 0.3em;
+padding-bottom: 0.1em;
+text-indent:1em;
+overflow:hidden;
+}
+
+/* Fine Barra Superiore */
+
+/* Barra Laterale */
+
+#nav{
+	padding-top:0.15em;	
+	float:left;
+	width:20%;
+	min-height:300px;
+	margin-left:0px;
+	font-size:1em;
+}
+
+#nav .link_menu a{
+	display: block;
+	border-top: 1px solid #F7F7F7;
+	text-decoration: underline;
+	color: black; 
+	padding: 0.3em 0.5em 0.3em 1em;
+	background-color: #d4e5f6;
+	font-weight: normal;
+}
+
+#nav #posizione_corrente{ 
+	padding: 0.3em 0.5em 0.3em 1em;
+	color: #000;
+	background-color: #abcdef;
+	text-decoration: none;
+	font-weight: bold;
+	text-indent:0.5em;
+}
+
+#nav .link_menu a:hover{
+	background-color: #abcdef;
+	text-decoration: none;
+}
+
+#nav #catalogo{
+	padding: 0.2em 0.5em 0.1em 1em;
+}
+
+#nav .link_menu_interno a{
+	display: block;
+	border-top: 1px solid #F7F7F7;
+	text-decoration: underline;
+	color: black; 
+	padding: 0.3em 0.5em 0.3em 2em;
+	background-color: #d4e5f6;
+	font-weight: normal;
+}
+
+#nav .link_menu_interno a:hover{
+	background-color: #abcdef;
+	text-decoration: none;
+}
+
+/* Fine Barra Laterale */
+
+/* Contenuto */
+
+#content{
+	padding:0.3em;
+	margin-top: 0.2em;
+	/*background-color:#ffffff;*/
+	margin-left:21%;
+	text-align:justify;
+
+	
+}
+
+/* Fine Contenuto */
+
+/* Fine Layout Principale */
+
+
+

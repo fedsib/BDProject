@@ -37,9 +37,9 @@
 	
 	
 		<?php
-		/*Pagina per la gestione delle prenotazioni
+		//Pagina per la gestione delle prenotazioni
 		
-		Controllo che l'utente abbia fatto il login, se sì, controllo la variabile Tipo per controllare se ha i diritti di Amministratore*/
+		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
 		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
@@ -62,8 +62,7 @@
 			}
 			}
 			
-			/*Se sono presenti informazioni inviate dal form sulla address bar le recupero e controllo che siano valide, 
-			altrimenti viene segnalato un errore o li imposto come vuoti*/
+			//Se sono presenti informazioni inviate dal form sulla address bar li recupero e controllo che siano validi, altrimenti viene segnalato un errore o li imposto come vuoti
 			if (isset($_GET['action']) && is_int(($_GET['action'])/15)) { $inizio=$_GET['action']; } else {$inizio = 0;}
 			$msg = "";
 			$errore = FALSE;

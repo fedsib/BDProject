@@ -23,7 +23,7 @@
 			loginlink();
 		?>
 	</p>
-	<p>Ti trovi in: Gestione Utenti -> Modifica Istruttore</p>
+	<p>Ti trovi in: Gestione Utenti -> Modifica Utente</p>
 	</div>
 
     <div id="nav"> 
@@ -37,23 +37,35 @@
 	
 	
 		<?php
-		/*Pagina per la modifica di un account admin
+		//Pagina per la modifica dei dati dei soci
 		
-		Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore*/
+		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
 		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
-		//Se e' loggato come amministratore vedo i dati dell'istruttore selezionato
+		//Se e' stato scelto di cancellare l'account selezionato viene eliminato
+		} elseif (isset($_POST['cancella'])) {
+			
+			$codice = $_POST['cancella'];
+			$conn = connessione();
+			$sql = "DELETE FROM PERSONA WHERE CodFiscale ='$codice'";
+			$conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
+			if ($conn->affected_rows > 0) {
+				echo '<tr><td><p>Account eliminato con successo. <a href="gutenti.php">Torna Indietro</a></p></td></tr>';
+			} else {
+				echo '<tr><td><p>Errore, utente non trovato. <a href="gutenti.php">Torna Indietro</a></p></td></tr>';
+			}
+		//Se e' stato selezionato di vedere un utente specifico mostro i suoti dati
 		} elseif (isset($_GET['vedi'])) {
 			
 			$user = $_GET['vedi'];
 			
 			$conn = connessione();
-			$sql = "SELECT  ACCOUNT.UserName, PERSONA.Nome, PERSONA.Cognome, PERSONA.CodFiscale, PERSONA.DataNasc, PERSONA.LuogoNasc, PERSONA.Telefono, PERSONA.Mail, PERSONA.Sesso, ISTRUTTORE.Qualifica, ISTRUTTORE.Retribuzione, ISTRUTTORE.DataAssunzione 
-			FROM ACCOUNT JOIN PERSONA ON ACCOUNT.CodFiscale = PERSONA.CodFiscale JOIN ISTRUTTORE ON ACCOUNT.CodFiscale = ISTRUTTORE.CodFiscale WHERE ACCOUNT.UserName ='".$user."'";
+			$sql = "SELECT  ACCOUNT.UserName, PERSONA.Nome, PERSONA.Cognome, PERSONA.CodFiscale, PERSONA.DataNasc, PERSONA.LuogoNasc, PERSONA.Telefono, PERSONA.Mail, PERSONA.Sesso, SOCIO.Livello, SOCIO.DataIscrizione 
+			FROM ACCOUNT JOIN PERSONA ON ACCOUNT.CodFiscale = PERSONA.CodFiscale JOIN SOCIO ON ACCOUNT.CodFiscale = SOCIO.CodFiscale WHERE ACCOUNT.UserName ='".$user."'";
 			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 				echo '<table width="600" border="0" align="center" cellpadding="5" cellspacing="5" class="Table">';
-				echo '<tr><th colspan="2">Informazioni Amministratore</th></tr>';
+				echo '<tr><th colspan="2">Informazioni Utente</th></tr>';
 			if ($result->num_rows > 0) {	
 			while($row = $result->fetch_assoc()) {
 				echo '<tr><td>Username:</td><td>'.$row['UserName'].'</td></tr>';
@@ -61,24 +73,23 @@
 				echo '<tr><td>Cognome:</td><td>'.$row['Cognome'].'</td></tr>';
 				echo '<tr><td>Cod. Fiscale:</td><td>'.$row['CodFiscale'].'</td></tr>';
 				echo '<tr><td>Sesso:</td><td>'.$row['Sesso'].'</td></tr>';
+				echo '<tr><td>Livello:</td><td>'.$row['Livello'].'</td></tr>';
+				$dataisc = $row['DataIscrizione'];
+				$data = date('d-m-Y', strtotime("$dataisc"));
+				echo '<tr><td>Data Iscrizione:</td><td>'.$data.'</td></tr>';
 				echo '<tr><td>Telefono:</td><td>'.$row['Telefono'].'</td></tr>';
 				echo '<tr><td>Mail:</td><td>'.$row['Mail'].'</td></tr>';
 				$datanasc = $row['DataNasc'];
 				$data = date('d-m-Y', strtotime("$datanasc"));
 				echo '<tr><td>Data Nascita:</td><td>'.$data.'</td></tr>';
 				echo '<tr><td>Luogo Nascita:</td><td>'.$row['LuogoNasc'].'</td></tr>';
-				echo '<tr><td>Qualifica:</td><td>'.$row['Qualifica'].'</td></tr>';
-				echo '<tr><td>Retribuzione:</td><td>'.$row['Retribuzione'].'</td></tr>';
-				echo '<tr><td>Data Assunzione:</td><td>'.$row['DataAssunzione'].'</td></tr>';
-				echo '<tr><td><a href="modadmin.php?moddati='.$user.'">Modifica Dati Personali</a></td><td><a href="gutenti.php">Torna Indietro</a></tr>';
+				echo '<tr><td><a href="moduser.php?moddati='.$user.'">Modifica Dati Personali</a></td><td><a href="gutenti.php">Torna Indietro</a></td></tr>';
 				
 				echo '<tr><td colspan="3" height="50"><form action="" method="post"><button name="reset" value="'.$row['CodFiscale'].'">Reset Password</button></form></td></tr>';
-				
-				
-			}
-			//Se necessario si puo' resettare la password al codice fiscale cosi' che l'utente possa modificarla di nuovo
-			if (isset($_POST['reset'])) {
-				
+				echo '<tr><td colspan="3" height="50"></td></tr><tr><td colspan="3" height="50"><form action="" method="post"><button name="cancella" value="'.$row['CodFiscale'].'">Cancella Account</button></form> Cancella tutte le informazioni dell\'utente</td></tr>';
+			} 
+				//Se necessario e' possibile resettare la password dell'utente al suo codice fiscale
+				if (isset($_POST['reset'])) {
 				$codice = $_POST['reset'];
 				$hash = SHA1($codice);
 				$conn = connessione();
@@ -94,14 +105,16 @@
 			}
 			
 				
+				
+				
 			} else { echo '<tr><td>Errore, Utente non trovato <a href="gutenti.php">Torna Indietro</a></td></tr>'; }
 				echo '</table>';
-		//Se invio il form di modifica dei dati mostro i campi in maniera modificabile e inviabile al server
+		//Se seleziono la modifica dei dati mostro le informazioni del DB in una form modificabile
 		} elseif (isset($_GET['moddati'])) {
 			
-			$errore = true; //Setto se mostro il form perché vuoto o per un errore o se proseguo con la modifica
+			$errore = true; //setto se mostrare il form o proseguire con la modifica
 			$msg = "";
-			//Se e' stato inviato il form controllo i dati e li preparo per la modifica nel DB
+			//Se e' stato inviato inviato il form coi dati da modificare li controllo, se non ci sono errori li modifico sul DB
 			if  (isset($_POST['modifica'])) {
 				
 				$errore = false;
@@ -157,43 +170,23 @@
 				$msg = $msg."<b>Errore! Il luogo di nascita puo' contenere solo lettere e spazi</b><br />";
 				$errore=TRUE;
 				};
-
-				$qualifica = isset($_POST['qualifica']) ? trim($_POST['qualifica']) : '';
-				if (! preg_match('/^[a-zA-Z0-9 ]*$/', $qualifica)) {
-				$msg = $msg."<b>Errore! La qualifica puo' contenere solo lettere, numeri e spazi.</b><br />";
-				$errore=TRUE;
-
-				};
 				
-				$retribuzione = isset($_POST['retribuzione']) ? trim($_POST['retribuzione']) : '';
-				if ((! preg_match('/^[0-9]*$/', $retribuzione)) || $retribuzione == '') {
-				$msg = $msg."<b>Errore! Retribuzione puo' contenere solo numeri</b><br />";
-				$errore=TRUE;
-				};
-				
-				$dataassunzione = isset($_POST['dataassunzione']) ? trim($_POST['dataassunzione']) : '';
-				if ((! preg_match('/^[0-9\-]*$/', $dataassunzione)) || (($timestamp = strtotime($dataassunzione)) === FALSE)) {
-				$msg = $msg."<b>Errore! La data deve contenere solo numeri e - ed essere nel formato corretto</b><br />";
-				$errore = TRUE;
-				} else {
-				$sqldataass = date('Y-m-d', strtotime("$dataassunzione"));
-				}
 				
 				$sesso = $_POST['sesso'];
-				
+				$livello = $_POST['livello'];
 			
 			}
 			
-			//Mostro il form per inserire i dati con i dati attualmente presenti nel DB
+			//Se non e' ancora stato inviato il form o ci sono errori sui dati mostro il form editabile con i dati dal DB
 			if ($errore) {
 			$user = $_GET['moddati'];
 			
 			$conn = connessione();
-			$sql = "SELECT  ACCOUNT.UserName, PERSONA.Nome, PERSONA.Cognome, PERSONA.CodFiscale, PERSONA.DataNasc, PERSONA.LuogoNasc, PERSONA.Telefono, PERSONA.Mail, PERSONA.Sesso, ISTRUTTORE.Qualifica, ISTRUTTORE.Retribuzione, ISTRUTTORE.DataAssunzione 
-			FROM ACCOUNT JOIN PERSONA ON ACCOUNT.CodFiscale = PERSONA.CodFiscale JOIN ISTRUTTORE ON ACCOUNT.CodFiscale = ISTRUTTORE.CodFiscale WHERE ACCOUNT.UserName ='".$user."'";
+			$sql = "SELECT  ACCOUNT.UserName, PERSONA.Nome, PERSONA.Cognome, PERSONA.CodFiscale, PERSONA.DataNasc, PERSONA.LuogoNasc, PERSONA.Telefono, PERSONA.Mail, PERSONA.Sesso, SOCIO.Livello
+			FROM ACCOUNT JOIN PERSONA ON ACCOUNT.CodFiscale = PERSONA.CodFiscale JOIN SOCIO ON ACCOUNT.CodFiscale = SOCIO.CodFiscale WHERE ACCOUNT.UserName ='".$user."'";
 			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 				echo '<table width="100%" border="0" align="center" cellpadding="5" cellspacing="5" class="Table"><form action="" method="post" name="Form Modifica Dati Personali">';
-				echo '<tr><th colspan="2">Informazioni Amministratore</th></tr>';
+				echo '<tr><th colspan="2">Informazioni Utente</th></tr>';
 			if ($result->num_rows > 0) {	
 			while($row = $result->fetch_assoc()) {
 				echo '<tr><td>Username:</td><td><input name="username" type="text" value="'.$row['UserName'].'"></input></td></tr>';
@@ -204,15 +197,18 @@
 				if ($sesso == "Maschio") { echo '<option value="Maschio" selected>Maschio</option>'; } else { echo '<option value="Maschio">Maschio</option>'; }
 				if ($sesso == "Femmina") { echo '<option value="Femmina" selected>Femmina</option>'; } else { echo '<option value="Femmina">Femmina</option>'; }
 				echo '</td></select>';
+				echo '<tr><td>Livello:</td><td><select name="livello">';
+				if ($livello == "Principiante") { echo '<option value="Principiante" selected>Principiante</option>'; } else { echo '<option value="Principiante">Principiante</option>'; }
+				if ($livello == "Intermedio") { echo '<option value="Intermedio" selected>Intermedio</option>'; } else { echo '<option value="Intermedio">Intermedio</option>'; }
+				if ($livello == "Esperto") { echo '<option value="Esperto" selected>Esperto</option>'; } else { echo '<option value="Esperto">Esperto</option>'; }
+				echo '</td></select>';
 				echo '<tr><td>Telefono:</td><td colspan="2"><input name="telefono" type="text" value="'.$row['Telefono'].'"></input></td></tr>';
 				echo '<tr><td>Mail:</td><td colspan="2"><input name="mail" type="text" value="'.$row['Mail'].'"></input></td></tr>';
 				$datanasc = $row['DataNasc'];
 				$data = date('d-m-Y', strtotime("$datanasc"));
 				echo '<tr><td>Data Nascita:</td><td><input name="datanasc" type="text" value="'.$data.'"></input></td><td>Formato gg-mm-aaaa</td></tr>';
 				echo '<tr><td>Luogo Nascita:</td><td colspan="2"><input name="luogonasc" type="text" value="'.$row['LuogoNasc'].'"></input></td></tr>';
-				echo '<tr><td>Qualifica:</td><td colspan="2"><input name="qualifica" type="text" value="'.$row['Qualifica'].'"></input></td></tr>';
-				echo '<tr><td>Retribuzione:</td><td colspan="2"><input name="retribuzione" type="text" value="'.$row['Retribuzione'].'"></input></td></tr>';
-				echo '<tr><td>Data Assunzione:</td><td colspan="2"><input name="dataassunzione" type="text" value="'.$row['DataAssunzione'].'"></input></td></tr>';
+
 				echo '<tr><td><button name="modifica" value="'.$row['CodFiscale'].'">Modifica</button></form></td><td><form action="" method="get"><button name="vedi" value="'.$row['UserName'].'">Annulla</button></form></td><td></td></tr>';
 				echo '<tr><td colspan="3">'.$msg.'</td>';
 			} 
@@ -221,7 +217,7 @@
 				echo '</table>';
 			
 			
-			//Se il form contiene tutti i dati necessari e sono corretti proseguo con la modifica nel DB
+			//Se non ci sono errori e i dati sono stati inseriti proseguo con la modifica dell'utente selezionato
 			} else {
 				
 				$codmodifica = $_POST['modifica'];				
@@ -231,12 +227,10 @@
 				$conn = connessione();
 				$conn->autocommit(0);
 				$sql1 = "UPDATE ACCOUNT SET UserName = '$username' WHERE CodFiscale = '$codmodifica'";
-				$sql2 = "UPDATE ISTRUTTORE SET ";
-				if ($qualifica != '' ) { $sql2 = $sql2. "Qualifica = '$qualifica',";} else {$sql2 = $sql2. "Qualifica = NULL,";}
-				$sql2 = $sql2 ."Retribuzione = '$retribuzione', DataAssunzione = '$sqldataass' WHERE CodFiscale = '$codmodifica'";
+				$sql2 = "UPDATE SOCIO SET Livello = '$livello' WHERE CodFiscale = '$codmodifica'";
 				$sql3 = "UPDATE PERSONA SET Nome = '$nome', Cognome = '$cognome', DataNasc = '$sqldatanasc', LuogoNasc = '$luogonasc',";
 				if ($telefono != '') { $sql3 = $sql3. "Telefono = '$telefono', "; } else { $sql3 = $sql3. "Telefono = NULL, "; }
-				$sql3 = $sql3."Telefono = '$telefono', Mail = '$mail', Sesso = '$sesso', CodFiscale = '$codfiscale' WHERE CodFiscale = '$codmodifica'";
+				$sql3 = $sql3." Mail = '$mail', Sesso = '$sesso', CodFiscale = '$codfiscale' WHERE CodFiscale = '$codmodifica'";
 				 
 				$result = $conn->query($sql1) or die("Errore nella query MySQL: ".$conn->error);
 				if (!$result) { throw new Exception("Errore nell'inserimento non effettuo le operazioni."); }
@@ -259,7 +253,7 @@
 			}
 		}  else {
 			
-			echo '<tr><td>Errore nel link. <a href="gutenti.php">Torna IndietroTorna Indietro</a></td></tr>';
+			echo '<tr><td>Errore nel link. <a href="gutenti.php">Torna Indietro</a></td></tr>';
 
 		}
 		

@@ -37,13 +37,13 @@
 		<?php
 		//Pagina per l'aggiunta di un Istruttore
 		
-		//Controllo che l'utente abbia fatto il login, se sì, controllo la variabile Tipo per controllare se ha i diritti di Amministratore
+		//Controllo che l'utente abbia fatto il login, se sì esiste controllo la variabile Tipo per controllare se ha i diritti di Amministratore
 		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
 			
 		}  else {
-				//Recupero le variabili se è stato inviato il form, se non sono settate le imposto a stringa vuota
+				//Recupero le variabili se è stato inviato il form, se non sono settato le imposto a stringa vuota
 				$nome = isset($_POST['Nome']) ? trim($_POST['Nome']) : '';
 				$cognome = isset($_POST['Cognome']) ? trim($_POST['Cognome']) : '';
 				$codfiscale = isset($_POST['CodFiscale']) ? trim($_POST['CodFiscale']) : '';
@@ -59,8 +59,7 @@
 
 			if  (isset($_POST['aggiungi'])) {
 				//Controllo tutti i campi immessi se trovo errori setto errore a true e aggiungo il messaggio di errore a $msg
-				$errore = false; //Setto false così da non mostrare il form se i dati sono tutti corretti, se c'e'
-								 //un errore viene rimessa a true e mostra il form con gli errori
+				$errore = false; //Setto false così da non mostrare il form se i dati sono tutti corretti, se c'e' un errore viene rimessa a true e mostra il form con gli errori
 				
 				
 				if ((! preg_match('/^[a-zA-Z]*$/', $nome)) || $nome == '') {
@@ -172,9 +171,8 @@
 			</table>
 			';
 			} else {
-				/*Se ci sono i dati e sono corretti invece del form proseguo con l'inserimento dei dati
-				Venendo generato da un admin imposto come default di nomeutente/password il codice fiscale 
-				che sono poi modificabili dai singoli account*/
+				//Se ci sono i dati e sono corretti invece del form proseguo con l'inserimento dei dati
+				//Venendo generato da un admin imposto come default di nomeutente/password il codice fiscale che sono poi modificabili dai singoli account
 				$user = $codfiscale;
 				$pass = SHA1($user);
 				

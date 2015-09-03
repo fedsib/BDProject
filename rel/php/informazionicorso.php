@@ -55,17 +55,17 @@
 			$codcorso = $_GET['action'];
 			$sql = "
 			SELECT ACCOUNT.CodFiscale
-			FROM ACCOUNT
-			WHERE ACCOUNT.UserName = '".$_SESSION['User']."'
-			AND ACCOUNT.Admin = '0'
-			AND ACCOUNT.CodFiscale NOT
-			IN (
-				SELECT ACCOUNT.CodFiscale
-				FROM ISCRITTOCORSO
-				JOIN ACCOUNT ON 
-				ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale 
-				WHERE ACCOUNT.UserName = '".$_SESSION['User']."'  
-				AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
+FROM ACCOUNT
+WHERE ACCOUNT.UserName = '".$_SESSION['User']."'
+AND ACCOUNT.Admin = '0'
+AND ACCOUNT.CodFiscale NOT
+IN (
+SELECT ACCOUNT.CodFiscale
+FROM ISCRITTOCORSO
+JOIN ACCOUNT ON 
+ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale 
+WHERE ACCOUNT.UserName = '".$_SESSION['User']."'  
+AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 				if ($result->num_rows > 0) {
 					while($row = $result->fetch_assoc()) {
@@ -76,7 +76,7 @@
 					
 					echo '<p>Iscritto al corso con successo. <a href="corsi.php">Torna Indietro</a></p>';
 				} else {
-					echo "<p>Impossibile iscrivere l'utente al corso selezionato. L'utente potrebbe essere già iscritto oppure essere un amministratore</p>";
+					echo "<p>Impossibile iscrivere l'utente al corso selezionato. L'utente potrebbe essere già iscritto oppure un amministratore</p>";
 				}
 			//Se e' stato inviato il form con il comando di cancellazione lo eseguo
 		} elseif ((isset($_GET['action'])) && (isset($_POST['Cancella']))) {
@@ -85,16 +85,16 @@
 			$codcorso = $_GET['action'];
 			$sql = "
 			SELECT ACCOUNT.CodFiscale
-			FROM ACCOUNT
-			WHERE ACCOUNT.UserName = '".$_SESSION['User']."'
-			AND ACCOUNT.Admin = '0'
-			AND ACCOUNT.CodFiscale IN (
-				SELECT ACCOUNT.CodFiscale
-				FROM ISCRITTOCORSO
-				JOIN ACCOUNT ON 
-				ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale 
-				WHERE ACCOUNT.UserName = '".$_SESSION['User']."'  
-				AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
+FROM ACCOUNT
+WHERE ACCOUNT.UserName = '".$_SESSION['User']."'
+AND ACCOUNT.Admin = '0'
+AND ACCOUNT.CodFiscale IN (
+SELECT ACCOUNT.CodFiscale
+FROM ISCRITTOCORSO
+JOIN ACCOUNT ON 
+ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale 
+WHERE ACCOUNT.UserName = '".$_SESSION['User']."'  
+AND ISCRITTOCORSO.CodCorso = '".$codcorso."')";
 			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 				if ($result->num_rows > 0) {
 					while($row = $result->fetch_assoc()) {
@@ -110,15 +110,14 @@
 			
 			
 			
-			/*Mostro la parte principale della pagina con le informazioni del corso, informazioni delle lezioni 
-			ed un bottone per iscriversi o cancellare l'iscrizione al corso*/
+			//Mostro la parte principale della pagina con le informazioni del corso, informazioni delle lezioni ed un bottone per iscriversi o cancellare l'iscrizione al corso
 		}elseif ((isset($_GET['action']))) {
 			//Mostro le informazioni del Corso
 			$codcorso = ($_GET['action']);
 			$conn = connessione();
 			$sql = "SELECT CORSO.CodCorso, CORSO.NomeCorso, CORSO.TipoCorso, PERSONA.Nome, PERSONA.Cognome
-					FROM CORSO
-					JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale WHERE CORSO.CodCorso ='".$codcorso."' AND CORSO.Attivo = '1'";
+			FROM CORSO
+			JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale WHERE CORSO.CodCorso ='".$codcorso."' AND CORSO.Attivo = '1'";
 			$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 		if ($result->num_rows > 0) {
 			echo '<table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2"><tr><th width="50%" colspan="2">Nome del Corso</th><th width="25%">Livello Corso</th><th width="25%">Istruttore</th></tr>';
@@ -174,7 +173,14 @@
 			echo '<p>Errore nel link <a href="corsi.php">Torna Indietro.</a></p>';
 			
 		}
-
+			
+			
+			
+			
+			
+			
+			
+			
 		?>
 		
 		

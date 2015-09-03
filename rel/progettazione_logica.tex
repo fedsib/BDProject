@@ -2,13 +2,13 @@
 
 \section{Gerarchia}
 La gerarchia della classe \textit{Persona} è stata implementata con partizionamento verticale visto che entrambe le sottoclassi \textit{Istruttore} e \textit{Socio} hanno degli attributi propri e considerato il fatto che sia la classe radice che le due sottoclassi hanno delle associazioni proprie.\\
-Si è scelto di sostituire la generalizzazione con associazioni, in modo da evitare di avere attributi con valori nulli suul'entità genitore e di ridurre la dimensione delle entità figlie. 
+Si è scelto di sostituire la generalizzazione con associazioni, in modo da evitare di avere attributi con valori nulli sull'entità genitore e di ridurre la dimensione delle entità figlie. 
 
 \section{Descrizione testuale dello schema relazionale}
 Le chiavi primarie vengono indicate come \underline{sottolineate}, mentre le chiavi esterne vengono marcate con un asterisco (*).\\
 
 \begin{itemize}
-\item \textsc{Persona}(\underline{\textbf{CodFiscale}}: string, \textbf{Nome} :string, \textbf{Cognome}: string, \textbf{DataNasc}: date,\\ \textbf{LuogoNasc}: string, \textbf{Telefono}: string,  \textbf{Mail}: string, \textbf{Sesso}: enum\{'Maschio', 'Femmina'\} ) 
+\item \textsc{Persona}(\underline{\textbf{CodFiscale}}: string, \textbf{Nome}: string, \textbf{Cognome}: string, \textbf{DataNasc}: date,\\ \textbf{LuogoNasc}: string, \textbf{Telefono}: string,  \textbf{Mail}: string, \textbf{Sesso}: enum\{'Maschio', 'Femmina'\} ) 
 \begin{itemize}
 \item Tutti i campi di Persona sono implementati come NOT NULL (tranne telefono, perché facoltativo).
 \end{itemize}
@@ -31,7 +31,7 @@ Le chiavi primarie vengono indicate come \underline{sottolineate}, mentre le chi
 \item Il campo \textit{Hash} memorizza l'hash SHA1 della password associata all'account.
 \end{itemize}
 
-\item \textsc{Corso}(\underline{\textbf{CodCorso}*}: int, \textbf{NomeCorso}: string, \textbf{TipoCorso}: enum\{'Principiante',\\'Intermedio','Avanzato'\}, \textbf{Attivo}: bool, \textbf{CodFiscale}*: string)
+\item \textsc{Corso}(\underline{\textbf{CodCorso}}: int, \textbf{NomeCorso}: string, \textbf{TipoCorso}: enum\{'Principiante',\\'Intermedio','Avanzato'\}, \textbf{Attivo}: bool, \textbf{CodFiscale}*: string)
 \begin{itemize}
 \item Tutti i campi tranne \textit{CodFiscale} sono NOT NULL. Vi possono essere corsi per il quale non v'è Istruttore.
 \item Il campo \textit{Attivo} che determina se un corso è attivo, oppure no, è impostato di default a zero.
@@ -42,11 +42,11 @@ Le chiavi primarie vengono indicate come \underline{sottolineate}, mentre le chi
 \end{itemize}
 
 \item \textsc{Lezione}(\underline{\textbf{CodLezione}}: int, \underline{\textbf{CodCorso}*}: int )   
-\item \textsc{IscrittoCorso}(\underline{CodCorso}*: int, \underline{\textbf{CodFiscale}*}: string) 
+\item \textsc{IscrittoCorso}(\underline{\textbf{CodCorso}*} int, \underline{\textbf{CodFiscale}*}: string) 
 \begin{itemize}
 \item Nuova tabella derivante dall'associazione \textit{IscrittoCorso}
 \end{itemize}
-\item \textsc{Prenotazione}(\textbf{CodCorso}*:int, \textbf{CodLezione}*: int, \textbf{CodFiscale}*: string, \underline{\textbf{CodCampo}*}: tinyint, \underline{\textbf{Data}}: date, \underline{\textbf{Ora}}: tinyint)  
+\item \textsc{Prenotazione}(\textbf{CodCorso}*: int, \textbf{CodLezione}*: int, \textbf{CodFiscale}*: string, \underline{\textbf{CodCampo}*}: tinyint, \underline{\textbf{Data}}: date, \underline{\textbf{Ora}}: tinyint)  
 \begin{itemize}
 \item I campi \textit{CodCorso}, \textit{CodLezione}, \textit{CodFiscale} possono essere NULL ma non tutti e tre contemporaneamente.
 \end{itemize}

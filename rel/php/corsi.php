@@ -48,16 +48,15 @@
 	
 			echo '<p>Solo gli utenti possono iscriversi ai corsi, per vedere/gestire i corsi <a href="gcorsi.php">clicca qui</a>.';
 		
-	/*Se ha selezionato mostra tutti i corsi cerco nel DB tutti i corsi attivi con i rispettivi istruttori e segnalo
-	se l'utente è già iscritto o meno*/
+	//Se ha selezionato mostra tutti i corso cerco nel DB tutti i corsi attivi con i rispettivi istruttori e segnale se l'utente è già iscritto o meno
 	} elseif ((isset($_GET['action'])) && ($_GET['action']) =="vedi" ) {
 		
 		$conn = connessione();
 		$sql = "SELECT CORSO.CodCorso, CORSO.NomeCorso, CORSO.TipoCorso, ACCISC.UserName, PERSONA.Nome, PERSONA.Cognome
-				FROM CORSO JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale
-				LEFT JOIN
-				(SELECT ACCOUNT.UserName, ISCRITTOCORSO.CodCorso FROM ACCOUNT JOIN ISCRITTOCORSO ON ACCOUNT.CodFiscale = ISCRITTOCORSO.CodFiscale WHERE ACCOUNT.UserName='".$_SESSION['User']."') AS ACCISC
-				ON CORSO.CodCorso = ACCISC.CodCorso WHERE CORSO.Attivo='1'";
+FROM CORSO JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale
+LEFT JOIN
+(SELECT ACCOUNT.UserName, ISCRITTOCORSO.CodCorso FROM ACCOUNT JOIN ISCRITTOCORSO ON ACCOUNT.CodFiscale = ISCRITTOCORSO.CodFiscale WHERE ACCOUNT.UserName='".$_SESSION['User']."') AS ACCISC
+ON CORSO.CodCorso = ACCISC.CodCorso WHERE CORSO.Attivo='1'";
 		
 		$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 		if ($result->num_rows > 0) {
@@ -76,16 +75,16 @@
 			echo "<p>Nessun corso disponibile.</p>";
 			
 		}
-	//Se l'utente ha appena aperto la pagina mostro semplicemente la lista dei corsi ai quali è iscritto con rispettivi istruttori del corso
+	//Se l'utente ha appena aperto la pagina mostro semplicemente la lista dei corsi a cui lui è iscritto con rispettivi istruttori del corso
 	} else {
 		
 		$conn = connessione();
 		$sql = "SELECT CORSO.CodCorso, CORSO.NomeCorso, CORSO.TipoCorso, PERSONA.Nome, PERSONA.Cognome
-				FROM CORSO
-				JOIN ISCRITTOCORSO ON CORSO.CodCorso = ISCRITTOCORSO.CodCorso
-				JOIN ACCOUNT ON ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale
-				JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale
-				WHERE ACCOUNT.UserName='".$_SESSION['User']."'";
+FROM CORSO
+JOIN ISCRITTOCORSO ON CORSO.CodCorso = ISCRITTOCORSO.CodCorso
+JOIN ACCOUNT ON ISCRITTOCORSO.CodFiscale = ACCOUNT.CodFiscale
+JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale
+WHERE ACCOUNT.UserName='".$_SESSION['User']."'";
 		$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 		if ($result->num_rows > 0) {
 			echo '<table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2"><tr><th width="45%">Nome del Corso</th><th width="	15%">Livello Corso</th><th width="20%">Istruttore</th><th width="20%"></th></tr>';
@@ -106,7 +105,12 @@
 		echo '<br /><br /><br /><a href="corsi.php?action=vedi">Vedi tutti i corsi</a>';
 
 	}
-
+	
+	
+	
+	
+	
+	
 	?>
 		
 		

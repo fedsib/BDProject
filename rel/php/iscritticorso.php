@@ -37,14 +37,13 @@
 	
 	
 		<?php
-		/*Pagina per la gestione degli utenti iscritti ad un corso
+		//Pagina per la gestione degli utenti iscritti ad un corso
 		
-		Controllo che sia stato effettuato il login e che sia un amministratore*/
+		//Controllo che sia stato effettuato il login e che sia un amministratore
 		if (!isset($_SESSION['User']) || ($_SESSION['Tipo']) != "Admin") {
 			
 			echo '<p>Bisogna effettuare il login come amministratore per vedere questa pagina.';
-		/*Se e' stato fatto il login ed e' stato inviato il form per cancellare un utente recupero il codice del corso
-		e dell'utente e lo elimino dalla tabella degli iscritti*/
+		//Se e' stato fatto il login ed e' stato inviato il form per cancellare un utente recupero il codice del corso e dell'utente e lo elimino dalla tabella degli iscritti
 		} elseif ((isset($_GET['action'])) && (isset($_POST['Cancella']))) {
 	
 			$codcorso = ($_GET['action']);
@@ -62,8 +61,8 @@
 				$codcorso = ($_GET['action']);
 				$conn = connessione();
 				$sql = "SELECT CORSO.Attivo, CORSO.CodCorso, CORSO.NomeCorso, CORSO.TipoCorso, PERSONA.Nome, PERSONA.Cognome
-						FROM CORSO
-						LEFT JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale WHERE CORSO.CodCorso ='".$codcorso."'";
+			FROM CORSO
+			LEFT JOIN PERSONA ON CORSO.CodFiscale = PERSONA.CodFiscale WHERE CORSO.CodCorso ='".$codcorso."'";
 				$result = $conn->query($sql) or die("Errore nella query MySQL: ".$conn->error);
 			if ($result->num_rows > 0) {
 				echo '<table width ="100%" border="0" align="center" cellpadding="5" cellspacing="2"><tr><th width="40%" colspan="2">Nome del Corso</th><th width="20%">Livello Corso</th><th width="20%">Istruttore</th><th width="20%"></th></tr>';
